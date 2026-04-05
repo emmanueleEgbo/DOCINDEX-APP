@@ -92,4 +92,5 @@ class DocumentRepository:
             )
             .order_by(func.min(Document.created_at).desc())
         )
+        rows = result.all()
             
