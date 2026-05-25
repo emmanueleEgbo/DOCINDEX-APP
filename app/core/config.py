@@ -13,10 +13,11 @@ class Settings(BaseSettings):
 
     # OpenAI
     openai_api_key: str
-    embedding_model: str
-    embedding_dimensions: int
+    embedding_model: str = "text-embedding-3-small"
+    embedding_dimensions: int = 1536
 
+    # Chunking defaults (can be overridden per request)
+    chunk_size: int = 500
+    chunk_overlap: int = 50
 
-    
-
-# model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env")
