@@ -22,4 +22,5 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env")
 
+# Single shared instance — imported everywhere
 settings = Settings()
