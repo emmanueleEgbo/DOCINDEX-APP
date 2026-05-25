@@ -21,3 +21,5 @@ class Settings(BaseSettings):
     chunk_overlap: int = 50
 
     model_config = SettingsConfigDict(env_file=".env")
+
+settings = Settings()
