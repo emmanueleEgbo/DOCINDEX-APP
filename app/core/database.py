@@ -14,8 +14,11 @@ class Base (DeclarativeBase):
 
 
 async_engine = create_async_engine(
-    settings.async_database_url,
-  
+    settings.async_database_url,   # Set True during development to see SQL in the console
+    echo=False,
+    pool_size=10,
+    max_overflow=20,
+    pool_pre_ping=True            # Test each connection before use (handles DB restarts)
 )
 
 AsyncSessionLocal = async_sessionmaker(
