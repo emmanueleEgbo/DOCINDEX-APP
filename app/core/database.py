@@ -15,6 +15,11 @@ class Base (DeclarativeBase):
 
 async_engine = create_async_engine(
     settings.async_database_url,
+  
+)
+
+AsyncSessionLocal = async_sessionmaker(
+    bind=async_engine,
     class_=AsyncSession,
     autocommit=False,
     autoflush=False,
