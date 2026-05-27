@@ -32,7 +32,7 @@ AsyncSessionLocal = async_sessionmaker(
 )
 
 # Fastapi Dependency
-async def get_db() -> AsyncSession:
+async def get_db():
     """
     Yields an AsyncSession for one request, then closes it automatically.
     Rolls back on any unhandled exception to keep the DB state clean.
@@ -40,7 +40,7 @@ async def get_db() -> AsyncSession:
     Usage in routes:
         async def my_route(db: AsyncSession = Depends(get_db)):
     """
-    async with AsyncSession as session:
+    async with AsyncSessionLocal() as session:
         try:
             yield session
         except Exception as exc:
