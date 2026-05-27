@@ -32,3 +32,9 @@ async def get_db() -> AsyncSession:
     Usage in routes:
         async def my_route(db: AsyncSession = Depends(get_db)):
     """
+    async with AsyncSession as session:
+        try:
+            yield session
+        except Exception as exc:
+            await session.rollback()
+            raise RuntimeError(str(exc))
