@@ -19,4 +19,16 @@ async_engine = create_async_engine(
     autocommit=False,
     autoflush=False,
     expire_on_commit=False,
+    # expire_on_commit=False: after db.commit(), objects keep their attribute values.
+    # Without this, accessing doc.id after a commit would trigger another DB query.
 )
+
+# Fastapi Dependency
+async def get_db() -> AsyncSession:
+    """
+    Yields an AsyncSession for one request, then closes it automatically.
+    Rolls back on any unhandled exception to keep the DB state clean.
+
+    Usage in routes:
+        async def my_route(db: AsyncSession = Depends(get_db)):
+    """
