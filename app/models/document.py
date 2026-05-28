@@ -16,4 +16,5 @@ original document — used for deletion and re-indexing.
 """
 from datetime import datetime
 from sqlalchemy import Integer, String, Text, DateTime, func
+from sqlalchemy.orm import Mapped, mapped_column
 from app.core.database import Base
