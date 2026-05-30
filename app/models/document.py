@@ -33,7 +33,7 @@ class Document(Base):
     )
 
     # ── Source document grouping ───────────────────────────────────────────────
-    source_document_id = mapped_column(
+    source_document_id: Mapped[str] = mapped_column(
         String(36),
         nullable=False,
         index=True,
