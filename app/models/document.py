@@ -55,4 +55,23 @@ class Document(Base):
         comment="Where this document came from: e.g. 'support_docs', 'faq', 'manual'"
     )
 
+    # ── Chunk data ────────────────────────────────────────────────────────────
+    chunk_index: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        comment="Position of this chunk within the original document (0-based)"
+    )
+
+    chunk_total: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        comment="Total number of chunks the original document was split into"
+    )
+
+    content: Mapped[str] = mapped_column(
+        Text,
+        nullable=False,
+        comment="The actual text content of this chunk"
+    )
+
     
