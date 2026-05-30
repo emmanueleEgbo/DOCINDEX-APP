@@ -74,4 +74,19 @@ class Document(Base):
         comment="The actual text content of this chunk"
     )
 
-    
+    # ── The embedding vector ──────────────────────────────────────────────────
+    embedding = mapped_column(
+        Vector(1536),
+        nullable=True,
+        # nullable=True: we insert the row first, then update with the embedding.
+        # This lets us handle embedding API failures gracefully without losing
+        # the chunk text.
+        comment="1536-dimensional embedding vector from text-embedding-3-small"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        server_default=func.now(),
+        nullable=False
+    )
