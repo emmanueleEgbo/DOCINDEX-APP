@@ -14,6 +14,7 @@ Why store chunks as separate rows rather than embedding the full document?
 The 'source_document_id' field groups all chunks that belong to the same
 original document — used for deletion and re-indexing.
 """
+from typing import Optional
 from datetime import datetime
 from sqlalchemy import Integer, String, Text, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
@@ -75,7 +76,7 @@ class Document(Base):
     )
 
     # ── The embedding vector ──────────────────────────────────────────────────
-    embedding = mapped_column(
+    embedding: Mapped[List[float] | None] = mapped_column(
         Vector(1536),
         nullable=True,
         # nullable=True: we insert the row first, then update with the embedding.
