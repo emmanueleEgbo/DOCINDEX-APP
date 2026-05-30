@@ -47,3 +47,12 @@ class Document(Base):
         nullable=False,
         comment="Title of the original document"
     )
+
+    source: Mapped[str] = mapped_column(
+        String(200),
+        nullable=True,
+        index=True,
+        comment="Where this document came from: e.g. 'support_docs', 'faq', 'manual'"
+    )
+
+    
