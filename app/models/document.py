@@ -17,4 +17,33 @@ original document — used for deletion and re-indexing.
 from datetime import datetime
 from sqlalchemy import Integer, String, Text, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
+from pgvector.sqlalchemy import Vector
 from app.core.database import Base
+
+
+class Document(Base):
+    __tablename__="documents"
+
+    id: Mapped[str] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+        comment="Unique ID for this specific chunk row"
+    )
+
+    # ── Source document grouping ───────────────────────────────────────────────
+    source_document_id = mapped_column(
+        String(36),
+        nullable=False,
+        index=True,
+        # All chunks from the same uploaded document share this UUID.
+        # To delete an entire document: DELETE WHERE source_document_id = ?
+        # To re-index a document: delete all rows with this ID, then re-insert.
+        comment="UUID grouping all chunks of one uploaded document"
+    )
+
+    title: Mapped[str] = mapped_column(
+        String(500),
+        nullable=False,
+        comment="Title of the original document"
+    )
