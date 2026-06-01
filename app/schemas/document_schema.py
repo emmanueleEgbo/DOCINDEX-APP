@@ -63,3 +63,16 @@ class ChunkResponse(BaseModel):
     # from_attributes=True allows Pydantic to read values from SQLAlchemy model
     # objects directly (instead of needing a dict)
 
+
+class DocumentSummary(BaseModel):
+    """
+    High-level summary of one uploaded document.
+    Returned in the GET /v1/documents list.
+    Groups all chunks under one entry so the client sees one document,
+    not N individual chunk rows.
+    """
+    source_document_id: str
+    title: str
+    source: Optional[str]
+    chunk_count: int       # How many chunks this document was split into
+    created_at: datetime   # Timestamp of the first chunk (= when the doc was indexed)
