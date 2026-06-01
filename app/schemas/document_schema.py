@@ -42,3 +42,24 @@ class DocumentCreate(BaseModel):
             }
         }
     }
+
+
+class ChunkResponse(BaseModel):
+    """
+    Response shape for a single chunk row.
+    The embedding field is intentionally excluded — it is 1,536 numbers
+    and completely useless to the API client.
+    """
+    id: int
+    source_document_id: str
+    title: str
+    source: Optional[str]
+    chunk_index: int
+    chunk_total: int
+    content: str
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+    # from_attributes=True allows Pydantic to read values from SQLAlchemy model
+    # objects directly (instead of needing a dict)
+
