@@ -86,3 +86,12 @@ class IndexingResponse(BaseModel):
     title: str
     chunk_count: int
     message: str
+
+
+
+class ErrorResponse(BaseModel):
+    """
+    Consistent error shape for all 4xx and 5xx responses.
+    """
+    code: str
+    message: str
