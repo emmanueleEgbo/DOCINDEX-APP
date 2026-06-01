@@ -10,3 +10,8 @@ Three clear separations:
 from pydantic import BaseModel, field_validator
 from typing import Optional
 from datetime import datetime
+
+class DocumentCreate(BaseModel):
+    """
+    What client send when uploading a document.
+    """
