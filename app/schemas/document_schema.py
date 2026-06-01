@@ -76,3 +76,13 @@ class DocumentSummary(BaseModel):
     source: Optional[str]
     chunk_count: int       # How many chunks this document was split into
     created_at: datetime   # Timestamp of the first chunk (= when the doc was indexed)
+
+
+class IndexingResponse(BaseModel):
+    """
+    Returned after POST /v1/documents completes successfully.
+    """
+    source_document_id: str
+    title: str
+    chunk_count: int
+    message: str
