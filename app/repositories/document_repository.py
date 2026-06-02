@@ -15,3 +15,8 @@ from app.models.document import Document
 from app.schemas.document_schema import DocumentSummary
 
 logger = logging.getLogger(__name__)
+
+
+class DocumentRepository:
+    def __init__(self, db: AsyncSession):
+        self.db = db
