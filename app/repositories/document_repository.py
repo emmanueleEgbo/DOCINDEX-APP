@@ -20,3 +20,13 @@ logger = logging.getLogger(__name__)
 class DocumentRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
+
+    async def create_chunks(
+        self,
+        source_document_id: str,
+        title: str,
+        source: Optional[str],
+        chunks: List[str],
+        embeddings: List[List[float]],
+    ) -> List[Document]:
+        pass
