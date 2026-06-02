@@ -29,4 +29,13 @@ class DocumentRepository:
         chunks: List[str],
         embeddings: List[List[float]],
     ) -> List[Document]:
+        """
+        Insert all chunk rows for one document in a single transaction.
+
+        Why a single transaction?
+          Either ALL chunks are saved, or NONE are.
+          If the process crashes after saving chunk 5 of 20, we don't want
+          a partially-indexed document that can never be fully queried.
+          The transaction rolls back on failure — clean state maintained.
+        """
         pass
