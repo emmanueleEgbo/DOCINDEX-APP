@@ -13,3 +13,5 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.document import Document
 from app.schemas.document_schema import DocumentSummary
+
+logger = logging.getLogger(__name__)
