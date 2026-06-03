@@ -38,4 +38,4 @@ class DocumentRepository:
           a partially-indexed document that can never be fully queried.
           The transaction rolls back on failure — clean state maintained.
         """
-        pass
+        documents = []
