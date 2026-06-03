@@ -69,6 +69,13 @@ class DocumentRepository:
     
 
     async def get_document_summaries(self) -> List[DocumentSummary]:
-       
+        """
+        Return one summary per source_document_id.
+
+        Rather than returning all N chunk rows, we GROUP BY source_document_id
+        and return: title, source, chunk_count, and the earliest created_at.
+
+        This is what GET /v1/documents returns to the client.
+        """
         pass
             
