@@ -66,4 +66,9 @@ class DocumentRepository:
             len(documents), source_document_id
         )
         return documents
+    
+
+    async def get_document_summaries(self) -> List[DocumentSummary]:
+       
+        pass
             
