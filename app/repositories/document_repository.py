@@ -53,10 +53,17 @@ class DocumentRepository:
             self.db.add(doc)
             documents.append(doc)
 
-            # commit only after all rows are successfully save atomically
-            await self.db.commit()
+        # commit only after all rows are successfully save atomically
+        await self.db.commit()
 
+        
+        # Refresh all objects to load server-generated values (id, created_at)
+        for doc in documents:
+            await self.db.refresh(doc)
+
+        logger.info(
+            "Committed %d chunk rows for source_document_id=%s",
+            len(documents), source_document_id
+        )
+        return documents
             
-            # Refresh all objects to load server-generated values (id, created_at)
-            for doc in documents:
-                await self.db.refresh(doc)
