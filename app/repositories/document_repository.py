@@ -50,3 +50,8 @@ class DocumentRepository:
                 content=chunk_text,
                 embedding=embedding_vector,
             )
+            self.db.add(doc)
+            documents.append(doc)
+
+            # commit only after all rows are successfully save atomically
+            await self.db.commit()
