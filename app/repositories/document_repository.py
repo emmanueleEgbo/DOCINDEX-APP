@@ -39,3 +39,14 @@ class DocumentRepository:
           The transaction rolls back on failure — clean state maintained.
         """
         documents = []
+
+        for i, (chunk_text, embedding_vector) in enumerate(zip(chunks, embeddings)):
+            doc = Document(
+                source_document_id=source_document_id,
+                title=title,
+                source=source,
+                chunk_index=i,
+                chunk_total=len(chunks),
+                content=chunk_text,
+                embedding=embedding_vector,
+            )
