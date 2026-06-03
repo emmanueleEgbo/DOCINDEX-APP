@@ -55,3 +55,8 @@ class DocumentRepository:
 
             # commit only after all rows are successfully save atomically
             await self.db.commit()
+
+            
+            # Refresh all objects to load server-generated values (id, created_at)
+            for doc in documents:
+                await self.db.refresh(doc)
