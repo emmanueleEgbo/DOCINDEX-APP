@@ -77,5 +77,19 @@ class DocumentRepository:
 
         This is what GET /v1/documents returns to the client.
         """
-        pass
+        result = await self.db.execute(
+            select(
+                Document.source_document_id,
+                Document.title,
+                Document.source,
+                func.count(Document.id).label("chunk_count"),
+                func.min(Document.created_at).label("created_at"),
+            )
+            .group_by(
+                Document.source_document_id,
+                Document.title,
+                Document.source,
+            )
+            .order_by(func.min(Document.created_at).desc())
+        )
             
