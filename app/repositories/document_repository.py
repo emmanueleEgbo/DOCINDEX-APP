@@ -110,3 +110,18 @@ class DocumentRepository:
     ) -> Optional[DocumentSummary]:
         """Fetch one document's summary by its source_document_id."""
         pass
+        result = await self.db.execute(
+            select(
+                Document.source_document_id,
+                Document.title,
+                Document.source,
+                func.count(Document.id).label("chunk_count"),
+                func.min(Document.created_at).label("created_at"),
+            )
+            .where(Document.source_document_id == source_document_id)
+            .group_by(
+                Document.source_document_id,
+                Document.title,
+                Document.source,
+            )
+        )
