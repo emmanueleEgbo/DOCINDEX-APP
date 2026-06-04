@@ -105,3 +105,8 @@ class DocumentRepository:
             for row in rows
         ]
             
+    async def get_summary_by_id(
+        self, source_document_id: str
+    ) -> Optional[DocumentSummary]:
+        """Fetch one document's summary by its source_document_id."""
+        pass
