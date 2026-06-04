@@ -93,4 +93,15 @@ class DocumentRepository:
             .order_by(func.min(Document.created_at).desc())
         )
         rows = result.all()
+
+        return [
+            DocumentSummary(
+                source_document_id=row.source_document_id,
+                title=row.title,
+                source=row.source,
+                chunk_count=row.chunk_count,
+                created_at=row.created_at,
+            )
+            for row in rows
+        ]
             
