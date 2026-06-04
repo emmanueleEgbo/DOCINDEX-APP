@@ -152,3 +152,11 @@ class DocumentRepository:
                 Document.source_document_id == source_document_id
             )
         )
+        await self.db.commit()
+
+        deleted_count = result.rowcount
+        logger.info(
+            "Deleted %d chunk rows for source_document_id=%s",
+            deleted_count, source_document_id
+        )
+        return deleted_count > 0
