@@ -147,3 +147,8 @@ class DocumentRepository:
         Called when a user deletes a document or when re-indexing
         (delete old chunks, then insert new ones).
         """
+        result = await self.db.execute(
+            delete(Document).where(
+                Document.source_document_id == source_document_id
+            )
+        )
