@@ -125,3 +125,16 @@ class DocumentRepository:
                 Document.source,
             )
         )
+
+        row = result.one_or_none()
+
+        if not row:
+            return None
+
+        return DocumentSummary(
+            source_document_id=row.source_document_id,
+            title=row.title,
+            source=row.source,
+            chunk_count=row.chunk_count,
+            created_at=row.created_at,
+        )
