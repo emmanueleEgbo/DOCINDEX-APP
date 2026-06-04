@@ -138,3 +138,12 @@ class DocumentRepository:
             chunk_count=row.chunk_count,
             created_at=row.created_at,
         )
+    
+    async def delete_by_source_id(self, source_document_id: str) -> bool:
+        """
+        Delete ALL chunk rows with this source_document_id.
+
+        This is a hard delete — all chunks gone in one statement.
+        Called when a user deletes a document or when re-indexing
+        (delete old chunks, then insert new ones).
+        """
