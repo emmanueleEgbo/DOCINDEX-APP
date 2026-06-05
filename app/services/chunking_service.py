@@ -16,3 +16,7 @@ def clean_text(text: str) -> str:
     Normalise whitespace and remove control characters.
     A clean document produces cleaner embeddings.
     """
+    text = re.sub(r'\s+', ' ', text)
+    # Remove non-printable control characters (except spaces)
+    text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
+    return text.strip()
