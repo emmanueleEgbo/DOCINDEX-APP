@@ -59,3 +59,5 @@ def chunk_text(
         raise ValueError(
             f"overlap ({overlap}) must be less than chunk_size ({chunk_size})"
         )
+    
+    chunks = []
