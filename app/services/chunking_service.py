@@ -64,7 +64,7 @@ def chunk_text(
     start = 0
 
     while start < len(text):
-          end   = start + chars_per_chunk
+        end   = start + chars_per_chunk
         chunk = text[start:end].strip()
 
         if chunk:  
