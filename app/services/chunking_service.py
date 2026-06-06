@@ -53,3 +53,9 @@ def chunk_text(
     chars_per_chunk   = chunk_size  * 4
     chars_per_overlap = overlap     * 4
     step              = chars_per_chunk - chars_per_overlap
+
+    
+    if step <= 0:
+        raise ValueError(
+            f"overlap ({overlap}) must be less than chunk_size ({chunk_size})"
+        )
