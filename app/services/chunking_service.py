@@ -35,6 +35,15 @@ def chunk_text(
         chunk_size: Approximate chunk size in tokens (default from settings).
         overlap:    Overlap in tokens between adjacent chunks (default from settings).
 
-    
+    Returns:
+        A list of text strings, each approximately chunk_size tokens long.
+
+    Example with chunk_size=4 tokens, overlap=1 token (for illustration):
+        text = "The quick brown fox jumps over the lazy dog"
+        chunks = [
+            "The quick brown fox",          ← tokens 0-3
+            "fox jumps over the",           ← tokens 3-6  (fox is the overlap)
+            "the lazy dog",                 ← tokens 6-8
+        ]
     """
     pass
