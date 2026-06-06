@@ -80,4 +80,7 @@ def prepare_document(
     chunk_size: int = None,
     overlap: int = None,
 ) -> List[str]:
-    pass
+    """
+    Clean and chunk a document in one call.
+    This is the function called by the indexing service.
+    """
