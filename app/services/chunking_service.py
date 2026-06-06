@@ -20,3 +20,11 @@ def clean_text(text: str) -> str:
     # Remove non-printable control characters (except spaces)
     text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
     return text.strip()
+
+
+def chunk_text(
+    text: str,
+    chunk_size: int = None,
+    overlap: int = None,
+) -> List[str]:
+    pass
