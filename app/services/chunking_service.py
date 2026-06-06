@@ -84,3 +84,9 @@ def prepare_document(
     Clean and chunk a document in one call.
     This is the function called by the indexing service.
     """
+    cleaned = clean_text(text)
+
+    if not cleaned:
+        raise ValueError("Document is empty after cleaning")
+
+    return chunk_text(cleaned, chunk_size=chunk_size, overlap=overlap)
