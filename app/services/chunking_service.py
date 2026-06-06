@@ -73,3 +73,11 @@ def chunk_text(
         start += step
 
     return chunks
+
+
+def prepare_document(
+    text: str,
+    chunk_size: int = None,
+    overlap: int = None,
+) -> List[str]:
+    pass
