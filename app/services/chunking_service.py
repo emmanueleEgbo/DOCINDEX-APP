@@ -46,4 +46,5 @@ def chunk_text(
             "the lazy dog",                 ← tokens 6-8
         ]
     """
-    pass
+    chunk_size = chunk_size or settings.chunk_size
+    overlap = overlap or settings.chunk_overlap
