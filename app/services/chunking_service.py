@@ -64,4 +64,12 @@ def chunk_text(
     start = 0
 
     while start < len(text):
-        pass
+          end   = start + chars_per_chunk
+        chunk = text[start:end].strip()
+
+        if chunk:  
+            chunks.append(chunk)
+
+        start += step
+
+    return chunks
