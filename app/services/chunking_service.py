@@ -61,3 +61,7 @@ def chunk_text(
         )
     
     chunks = []
+    start = 0
+
+    while start < len(text):
+        pass
