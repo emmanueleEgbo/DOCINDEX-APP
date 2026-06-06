@@ -27,4 +27,14 @@ def chunk_text(
     chunk_size: int = None,
     overlap: int = None,
 ) -> List[str]:
+    """
+    Split text into overlapping fixed-size chunks.
+
+    Args:
+        text:       The cleaned text to split.
+        chunk_size: Approximate chunk size in tokens (default from settings).
+        overlap:    Overlap in tokens between adjacent chunks (default from settings).
+
+    
+    """
     pass
