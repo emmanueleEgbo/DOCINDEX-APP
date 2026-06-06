@@ -48,3 +48,8 @@ def chunk_text(
     """
     chunk_size = chunk_size or settings.chunk_size
     overlap = overlap or settings.chunk_overlap
+
+    # Convert token counts to character counts
+    chars_per_chunk   = chunk_size  * 4
+    chars_per_overlap = overlap     * 4
+    step              = chars_per_chunk - chars_per_overlap
