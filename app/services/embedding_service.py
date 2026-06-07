@@ -44,3 +44,20 @@ async def embed_text(text: str) -> List[float]:
         input=text,
     )
     return result.data[0].embedding
+
+
+async def embed_batch(texts: List[str]) -> List[List[float]]:
+    """
+    Embed multiple texts in as few API calls as possible.
+
+    If texts has 10 items  → 1 API call  (10 embeddings returned)
+    If texts has 150 items → 2 API calls (100 + 50)
+
+    Returns a list of vectors in the same order as the input texts.
+
+    Args:
+        texts: List of strings to embed. Each string should be one chunk.
+
+    Returns:
+        List of embedding vectors, one per input text.
+    """
