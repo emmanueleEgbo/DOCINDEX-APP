@@ -39,3 +39,8 @@ async def embed_text(text: str) -> List[float]:
 
     For indexing many chunks, use embed_batch() instead.
     """
+    result = await _client.embeddings.create(
+        model=settings.embedding_model,
+        input=text,
+    )
+    return result.data[0].embedding
