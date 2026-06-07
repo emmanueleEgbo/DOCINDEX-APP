@@ -61,3 +61,7 @@ async def embed_batch(texts: List[str]) -> List[List[float]]:
     Returns:
         List of embedding vectors, one per input text.
     """
+    if not texts:
+        return []
+
+    all_embeddings: List[List[float]] = []
