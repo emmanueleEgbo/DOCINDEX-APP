@@ -65,3 +65,14 @@ async def embed_batch(texts: List[str]) -> List[List[float]]:
         return []
 
     all_embeddings: List[List[float]] = []
+
+        # Split into batches of BATCH_LIMIT
+    for batch_start in range(0, len(texts), BATCH_LIMIT):
+        batch = texts[batch_start : batch_start + BATCH_LIMIT]
+
+        logger.info(
+            "Embedding batch %d-%d of %d texts",
+            batch_start + 1,
+            batch_start + len(batch),
+            len(texts),
+        )
