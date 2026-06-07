@@ -85,3 +85,8 @@ async def embed_batch(texts: List[str]) -> List[List[float]]:
         except Exception as exc:
             logger.error("OpenAI embedding API error: %s", exc)
             raise RuntimeError(f"Embedding API failed: {exc}") from exc
+        
+        # result.data is a list of Embedding objects sorted by index
+        # We sort explicitly to guarantee order matches input
+        embeddings = sorted(result.data, key=lambda e: e.index)
+        all_embeddings.extend([e.embedding for e in embeddings])
