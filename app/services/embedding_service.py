@@ -90,3 +90,7 @@ async def embed_batch(texts: List[str]) -> List[List[float]]:
         # We sort explicitly to guarantee order matches input
         embeddings = sorted(result.data, key=lambda e: e.index)
         all_embeddings.extend([e.embedding for e in embeddings])
+
+        # Brief pause between batches to be respectful of rate limits
+        if batch_start + BATCH_LIMIT < len(texts):
+            await asyncio.sleep(0.1)
