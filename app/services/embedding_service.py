@@ -94,3 +94,4 @@ async def embed_batch(texts: List[str]) -> List[List[float]]:
         # Brief pause between batches to be respectful of rate limits
         if batch_start + BATCH_LIMIT < len(texts):
             await asyncio.sleep(0.1)
+    return all_embeddings
