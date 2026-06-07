@@ -76,3 +76,12 @@ async def embed_batch(texts: List[str]) -> List[List[float]]:
             batch_start + len(batch),
             len(texts),
         )
+
+        try:
+            result = await _client.embeddings.create(
+                model=settings.embedding_model,
+                input=batch,
+            )
+        except Exception as exc:
+            logger.error("OpenAI embedding API error: %s", exc)
+            raise RuntimeError(f"Embedding API failed: {exc}") from exc
