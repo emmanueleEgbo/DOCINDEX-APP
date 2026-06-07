@@ -23,3 +23,19 @@ logger = logging.getLogger(__name__)
 
 # Single shared client — reuses the underlying HTTP connection pool
 _client = AsyncOpenAI(api_key=settings.openai_api_key)
+
+# Maximum chunks per single API call (OpenAI's documented limit is 2,048)
+BATCH_LIMIT = 100   # We use 100 to stay well within limits and control memory
+
+
+async def embed_text(text: str) -> List[float]:
+    """
+    Embed a single piece of text.
+    Returns a list of 1,536 floats.
+
+    Used for:
+    - Embedding a user's search query at query time
+    - Testing in isolation
+
+    For indexing many chunks, use embed_batch() instead.
+    """
