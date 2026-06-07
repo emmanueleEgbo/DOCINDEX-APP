@@ -12,3 +12,14 @@ Why batch embedding?
   This means: 1 API call regardless of how many chunks we have.
   Faster. Cheaper. Fewer rate limit issues.
 """
+import logging
+import logging
+import asyncio
+from typing import List
+from openai import AsyncOpenAI
+from app.core.config import settings
+
+logger = logging.getLogger(__name__)
+
+# Single shared client — reuses the underlying HTTP connection pool
+_client = AsyncOpenAI(api_key=settings.openai_api_key)
