@@ -13,3 +13,6 @@ import uuid
 import logging
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.services.chunking_service import prepare_document
+from app.services.embedding_service import embed_batch
