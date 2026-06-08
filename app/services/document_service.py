@@ -9,3 +9,7 @@ This service connects the three steps:
 It is called by the route handler. The route handler knows nothing
 about chunking or embeddings — that is all in here.
 """
+import uuid
+import logging
+from typing import List, Optional
+from sqlalchemy.ext.asyncio import AsyncSession
