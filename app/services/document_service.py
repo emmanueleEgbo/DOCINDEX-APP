@@ -44,4 +44,12 @@ async def index_document(
     Returns:
         IndexingResponse with chunk_count and the source_document_id.
     """
-    pass
+    # ── Step 1: Generate document ID ──────────────────────────────────────────
+    # All chunks from this document share this ID.
+    # Used later to delete or re-index the full document.
+    source_document_id = str(uuid.uuid4())
+    logger.info(
+        "Starting indexing for document '%s' (id: %s)",
+        data.title, source_document_id
+    )
+  
