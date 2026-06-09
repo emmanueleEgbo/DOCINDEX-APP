@@ -64,3 +64,18 @@ async def index_document(
     logger.info("Requesting embeddings for %d chunks...", chunk_total)
     embeddings = await embed_batch(chunks)
     # embeddings[i] corresponds to chunks[i] — same order guaranteed
+    
+    
+    # ── Step 4: Store all chunks in PostgreSQL ────────────────────────────────
+    repo = DocumentRepository(db)
+    documents = await repo.create_chunks(
+        source_document_id=source_document_id,
+        title=data.title,
+        source=data.source,
+        chunks=chunks,
+        embeddings=embeddings,
+    )
+    logger.info(
+        "Stored %d chunk rows for document '%s'",
+        len(documents), data.title
+    )
