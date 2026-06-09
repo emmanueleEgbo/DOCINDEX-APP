@@ -52,4 +52,10 @@ async def index_document(
         "Starting indexing for document '%s' (id: %s)",
         data.title, source_document_id
     )
+
+    # ── Step 2: Clean and chunk ───────────────────────────────────────────────
+    chunks = prepare_document(data.content)
+    chunk_total = len(chunks)
+    logger.info("Document split into %d chunks", chunk_total)
+
   
