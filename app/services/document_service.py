@@ -79,3 +79,11 @@ async def index_document(
         "Stored %d chunk rows for document '%s'",
         len(documents), data.title
     )
+
+    # ── Step 5: Return summary ────────────────────────────────────────────────
+    return IndexingResponse(
+        source_document_id=source_document_id,
+        title=data.title,
+        chunk_count=chunk_total,
+        message=f"Document indexed successfully into {chunk_total} chunks."
+    )
