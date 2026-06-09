@@ -58,4 +58,9 @@ async def index_document(
     chunk_total = len(chunks)
     logger.info("Document split into %d chunks", chunk_total)
 
-  
+    # ── Step 3: Batch embed all chunks ────────────────────────────────────────
+    # All chunks are sent in ONE API call (or a few if > 100 chunks).
+    # Much faster and cheaper than one call per chunk.
+    logger.info("Requesting embeddings for %d chunks...", chunk_total)
+    embeddings = await embed_batch(chunks)
+    # embeddings[i] corresponds to chunks[i] — same order guaranteed
