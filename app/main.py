@@ -15,3 +15,9 @@ from sqlalchemy import text
 from app.core.database import engine, Base
 from app.api.document_routes import document_router
 from app.models import document  # noqa: F401
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s  %(levelname)-8s  %(name)s  %(message)s",
+)
+logger = logging.getLogger(__name__)
