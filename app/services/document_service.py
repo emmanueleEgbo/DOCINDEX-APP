@@ -103,4 +103,6 @@ async def get_document_by_id(
     source_document_id: str,
 ) -> Optional[DocumentSummary]:
     """Fetch metadata for one document by its source_document_id."""
-    
+    repo = DocumentRepository(db)
+    return repo.get_summary_by_id(source_document_id)
+
