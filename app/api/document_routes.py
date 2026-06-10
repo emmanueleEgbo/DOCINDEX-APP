@@ -67,3 +67,19 @@ async def index_document(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail=f"Embedding API error: {exc}",
         )
+    
+
+@document_router.get(
+    "",
+    response_model=List[DocumentSummary],
+    summary="List all indexed documents",
+    description="""
+    Returns one summary entry per uploaded document.
+    Shows: source_document_id, title, source, chunk_count, created_at.
+    Embedding vectors are never included in list responses.
+    """
+)
+async def list_documents(
+    db: AsyncSession = Depends(get_db),
+) -> List[DocumentSummary]:
+    pass
