@@ -111,3 +111,7 @@ async def delete_document(
     db: AsyncSession,
     source_document_id: str,
 ) -> bool:
+    """
+    Delete all chunk rows belonging to this source_document_id.
+    Returns True if rows were deleted, False if not found.
+    """
