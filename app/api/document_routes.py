@@ -52,4 +52,18 @@ async def index_document(
     body: DocumentCreate,
     db: AsyncSession = Depends(get_db),
 ) -> IndexingResponse:
-    pass
+    try:
+        return await document_service.index_document(db, body)
+    except ValueError as exc:
+        # Raised by chunking_service when content is empty after cleaning
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        )
+    except RuntimeError as exc:
+        # Raised by embedding_service when the OpenAI API call fails
+        logger.error("Indexing failed: %s", exc)
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Embedding API error: {exc}",
+        )
