@@ -87,3 +87,14 @@ async def index_document(
         chunk_count=chunk_total,
         message=f"Document indexed successfully into {chunk_total} chunks."
     )
+
+
+async def get_all_documents(db: AsyncSession) -> List[DocumentSummary]:
+    """
+    Return a deduplicated list of documents (one entry per source_document_id).
+    Clients see one document, not N chunk rows.
+    """
+    repo = DocumentRepository(db)
+    return repo.get_document_summaries()
+
+
