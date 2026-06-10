@@ -82,4 +82,4 @@ async def index_document(
 async def list_documents(
     db: AsyncSession = Depends(get_db),
 ) -> List[DocumentSummary]:
-    pass
+    return await document_service.get_all_documents(db)
