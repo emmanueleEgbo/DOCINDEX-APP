@@ -96,4 +96,9 @@ async def get_document(
     db: AsyncSession = Depends(get_db),
 ) -> DocumentSummary:
     doc = await document_service.get_document_by_id(db, source_document_id)
-    
+    if not doc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Document {source_document_id} not found",
+        )
+    return doc
