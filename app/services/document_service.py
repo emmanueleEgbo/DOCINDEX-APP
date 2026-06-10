@@ -106,3 +106,8 @@ async def get_document_by_id(
     repo = DocumentRepository(db)
     return repo.get_summary_by_id(source_document_id)
 
+
+async def delete_document(
+    db: AsyncSession,
+    source_document_id: str,
+) -> bool:
