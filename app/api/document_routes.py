@@ -102,3 +102,16 @@ async def get_document(
             detail=f"Document {source_document_id} not found",
         )
     return doc
+
+
+@document_router.delete(
+    "/{source_document_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={404: {"model": ErrorResponse}},
+    summary="Delete a document and all its chunks",
+    description="""
+    Deletes every chunk row with this source_document_id.
+    This is a hard delete — all content and embeddings are permanently removed.
+    To update a document: delete it, then re-POST with the updated content.
+    """
+)
