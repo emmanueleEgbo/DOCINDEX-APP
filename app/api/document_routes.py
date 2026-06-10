@@ -120,3 +120,8 @@ async def delete_document(
     db: AsyncSession = Depends(get_db),
 ) -> None:
     deleted = await document_service.delete_document(db, source_document_id)
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Document {source_document_id} not found",
+        )
