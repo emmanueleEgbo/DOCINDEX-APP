@@ -8,3 +8,10 @@ The lifespan context manager handles startup and shutdown:
 Run with:
     uvicorn app.main:app --reload
 """
+import logging
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from sqlalchemy import text
+from app.core.database import engine, Base
+from app.api.document_routes import document_router
+from app.models import document  # noqa: F401
