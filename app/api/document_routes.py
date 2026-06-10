@@ -83,3 +83,16 @@ async def list_documents(
     db: AsyncSession = Depends(get_db),
 ) -> List[DocumentSummary]:
     return await document_service.get_all_documents(db)
+
+
+@document_router.get(
+    "/{source_document_id}",
+    response_model=DocumentSummary,
+    responses={404: {"model": ErrorResponse}},
+    summary="Get one document's metadata",
+)
+async def get_document(
+    source_document_id: str,
+    db: AsyncSession = Depends(get_db),
+) -> DocumentSummary:
+    pass
