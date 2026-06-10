@@ -95,4 +95,5 @@ async def get_document(
     source_document_id: str,
     db: AsyncSession = Depends(get_db),
 ) -> DocumentSummary:
-    pass
+    doc = await document_service.get_document_by_id(db, source_document_id)
+    
