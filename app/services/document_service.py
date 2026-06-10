@@ -115,3 +115,5 @@ async def delete_document(
     Delete all chunk rows belonging to this source_document_id.
     Returns True if rows were deleted, False if not found.
     """
+    repo = DocumentRepository(db)
+    return repo.delete_by_source_id(source_document_id)
