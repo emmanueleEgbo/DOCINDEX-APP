@@ -115,3 +115,8 @@ async def get_document(
     To update a document: delete it, then re-POST with the updated content.
     """
 )
+async def delete_document(
+    source_document_id: str,
+    db: AsyncSession = Depends(get_db),
+) -> None:
+    deleted = await document_service.delete_document(db, source_document_id)
