@@ -98,3 +98,9 @@ async def get_all_documents(db: AsyncSession) -> List[DocumentSummary]:
     return repo.get_document_summaries()
 
 
+async def get_document_by_id(
+    db: AsyncSession,
+    source_document_id: str,
+) -> Optional[DocumentSummary]:
+    """Fetch metadata for one document by its source_document_id."""
+    
