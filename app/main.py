@@ -30,4 +30,7 @@ async def lifespan(app: FastAPI):
         logger.info("pgvector extension enabled")
         await conn.run_sync(Base.metadata.create_all)
         logger.info("Database tables created/verified")
+    yield
+    logger.info("Shutting down DocMind API...")
+    await engine.dispose()
  
