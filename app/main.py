@@ -34,3 +34,11 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down DocMind API...")
     await engine.dispose()
  
+
+app = FastAPI(
+    title="DocMind API",
+    description="AI-powered document indexing and retrieval backend. "
+                "Upload documents, search by meaning, get grounded answers.",
+    version="1.0.0",
+    lifespan=lifespan,
+)
