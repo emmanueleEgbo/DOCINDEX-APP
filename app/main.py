@@ -42,3 +42,14 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+
+app.include_router(document_router)
+
+@app.get("/", tags=["root"])
+async def root():
+    return {
+        "service": "DocMind API",
+        "version": "1.0.0",
+        "docs": "/docs",
+    }
