@@ -12,7 +12,7 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy import text
-from app.core.database import engine, Base
+from app.core.database import async_engine, Base
 from app.api.document_routes import document_router
 from app.models import document  # noqa: F401
 
@@ -25,14 +25,14 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting up DocMind API...")
-    async with engine.begin() as conn:
+    async with async_engine.begin() as conn:
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
         logger.info("pgvector extension enabled")
         await conn.run_sync(Base.metadata.create_all)
         logger.info("Database tables created/verified")
     yield
     logger.info("Shutting down DocMind API...")
-    await engine.dispose()
+    await async_engine.dispose()
  
 
 app = FastAPI(
