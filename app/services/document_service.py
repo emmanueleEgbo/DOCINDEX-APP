@@ -95,7 +95,7 @@ async def get_all_documents(db: AsyncSession) -> List[DocumentSummary]:
     Clients see one document, not N chunk rows.
     """
     repo = DocumentRepository(db)
-    return repo.get_document_summaries()
+    return await repo.get_document_summaries()
 
 
 async def get_document_by_id(
