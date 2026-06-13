@@ -104,7 +104,7 @@ async def get_document_by_id(
 ) -> Optional[DocumentSummary]:
     """Fetch metadata for one document by its source_document_id."""
     repo = DocumentRepository(db)
-    return repo.get_summary_by_id(source_document_id)
+    return await repo.get_summary_by_id(source_document_id)
 
 
 async def delete_document(
@@ -116,4 +116,4 @@ async def delete_document(
     Returns True if rows were deleted, False if not found.
     """
     repo = DocumentRepository(db)
-    return repo.delete_by_source_id(source_document_id)
+    return await repo.delete_by_source_id(source_document_id)
