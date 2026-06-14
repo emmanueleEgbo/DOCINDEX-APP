@@ -36,3 +36,7 @@ async def generate_answer(question: str, context_chunks: List[str]) -> str:
     Returns:
         The LLM's answer as a plain string.
     """
+    # Join chunks with a separator so the LLM can distinguish between them
+    context = "\n\n---\n\n".join(context_chunks)
+
+    logger.info("Sending %d context chunks to LLM", len(context_chunks))
