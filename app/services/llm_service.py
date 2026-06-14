@@ -40,3 +40,17 @@ async def generate_answer(question: str, context_chunks: List[str]) -> str:
     context = "\n\n---\n\n".join(context_chunks)
 
     logger.info("Sending %d context chunks to LLM", len(context_chunks))
+
+    try:
+        response = await _client.chat.completions.create(
+            model=settings.llm_model,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT.format(context=context)},
+                {"role": "user", "content": question},
+            ],
+            temperature=0.1,  # low temperature = more factual, less creative
+        )
+        return response.choices[0].message.content
+    except Exception as exc:
+        logger.error("LLM API error: %s", exc)
+        raise RuntimeError(f"LLM API failed: {exc}") from exc
