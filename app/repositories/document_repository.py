@@ -160,3 +160,21 @@ class DocumentRepository:
             deleted_count, source_document_id
         )
         return deleted_count > 0
+    
+
+    async def search_similar_chunks(
+        self,
+        query_vector: List[float],
+        top_k: int = 5,
+    ) -> list:
+        """
+        Find the top_k chunks whose embedding is closest to the query_vector.
+
+        Uses pgvector's <=> operator which computes cosine distance.
+        Cosine distance = 1 - cosine similarity, so ordering by <=> ascending
+        gives the most similar chunks first.
+
+        The similarity score returned is: 1 - cosine_distance
+        A score of 1.0 means identical, 0.0 means completely unrelated.
+        """
+       
