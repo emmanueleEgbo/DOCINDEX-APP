@@ -13,4 +13,11 @@ class QueryRequest(BaseModel):
             raise ValueError("question cannot be empty")
         return v.strip()
 
- 
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "question": "What is the refund policy?",
+                "top_k": 5,
+            }
+        }
+    }
