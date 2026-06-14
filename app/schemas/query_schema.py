@@ -21,3 +21,13 @@ class QueryRequest(BaseModel):
             }
         }
     }
+
+
+class SourceChunk(BaseModel):
+    """One chunk that was retrieved and used as context for the answer."""
+    title: str
+    source: Optional[str]
+    content: str
+    similarity: float  # cosine similarity score between 0 and 1
+
+
