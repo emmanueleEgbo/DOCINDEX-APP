@@ -180,5 +180,19 @@ class DocumentRepository:
         # pgvector expects the vector as a string: '[0.1, 0.2, ...]'
         vector_str = "[" + ",".join(str(x) for x in query_vector) + "]"
 
-  
+        result = await self.db.execute(
+            text("""
+                SELECT
+                    title,
+                    source,
+                    content,
+                    1 - (embedding <=> CAST(:vector AS vector)) AS similarity
+                FROM documents
+                WHERE embedding IS NOT NULL
+                ORDER BY embedding <=> CAST(:vector AS vector)
+                LIMIT :top_k
+            """),
+            {"vector": vector_str, "top_k": top_k},
+        )
+        
     
