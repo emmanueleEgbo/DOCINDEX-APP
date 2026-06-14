@@ -194,5 +194,5 @@ class DocumentRepository:
             """),
             {"vector": vector_str, "top_k": top_k},
         )
-        
+        return result.all()
     
