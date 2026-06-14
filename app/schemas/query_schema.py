@@ -31,3 +31,7 @@ class SourceChunk(BaseModel):
     similarity: float  # cosine similarity score between 0 and 1
 
 
+class QueryResponse(BaseModel):
+    question: str
+    answer: str
+    sources: List[SourceChunk]  # the chunks the answer was grounded in
