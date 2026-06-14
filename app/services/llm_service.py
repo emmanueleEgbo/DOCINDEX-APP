@@ -23,3 +23,16 @@ Do not make up information that is not in the context.
 
 Context:
 {context}"""
+
+
+async def generate_answer(question: str, context_chunks: List[str]) -> str:
+    """
+    Send the question + retrieved chunks to the LLM and return its answer.
+
+    Args:
+        question:       The user's original question.
+        context_chunks: List of chunk texts retrieved from pgvector.
+
+    Returns:
+        The LLM's answer as a plain string.
+    """
