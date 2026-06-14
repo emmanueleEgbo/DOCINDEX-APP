@@ -177,4 +177,5 @@ class DocumentRepository:
         The similarity score returned is: 1 - cosine_distance
         A score of 1.0 means identical, 0.0 means completely unrelated.
         """
-       
+        # pgvector expects the vector as a string: '[0.1, 0.2, ...]'
+        vector_str = "[" + ",".join(str(x) for x in query_vector) + "]"
