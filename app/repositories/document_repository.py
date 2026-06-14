@@ -8,7 +8,7 @@ import logging
 from typing import List, Optional
 from datetime import datetime
 
-from sqlalchemy import select, delete, func, distinct
+from sqlalchemy import select, delete, func, distinct, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.document import Document
@@ -179,3 +179,6 @@ class DocumentRepository:
         """
         # pgvector expects the vector as a string: '[0.1, 0.2, ...]'
         vector_str = "[" + ",".join(str(x) for x in query_vector) + "]"
+
+  
+    
