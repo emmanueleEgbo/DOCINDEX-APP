@@ -37,3 +37,8 @@ async def extract_text(file: UploadFile) -> str:
         return "\n".join(
             para.text for para in doc.paragraphs if para.text.strip()
         )
+    
+    else:
+        raise ValueError(
+            f"Unsupported file type '{filename}'. Supported formats: .txt, .pdf, .docx"
+        )
