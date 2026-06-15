@@ -11,3 +11,12 @@ The extracted text is passed straight into the existing indexing pipeline
 """
 import io
 from fastapi import UploadFile
+
+
+async def extract_text(file: UploadFile) -> str:
+    """
+    Read the uploaded file and return its text content as a plain string.
+    Raises ValueError for unsupported file types.
+    """
+    filename = (file.filename or "").lower()
+    content = await file.read()
