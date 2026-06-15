@@ -53,3 +53,12 @@ async def query_documents(
     # Step 3: call the LLM with the retrieved chunk texts as context
     context_texts = [chunk.content for chunk in chunks]
     answer = await generate_answer(request.question, context_texts)
+
+    logger.info("Answer generated using %d source chunks", len(chunks))
+
+    # Step 4: return the answer alongside the source chunks used
+    return QueryResponse(
+        question=request.question,
+        answer=answer,
+        sources=chunks,
+    )
