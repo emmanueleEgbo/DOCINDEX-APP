@@ -26,3 +26,7 @@ async def query_documents(
     # used during indexing — this ensures the vectors are in the same space
     logger.info("Embedding question: '%s'", request.question[:60])
     query_vector = await embed_text(request.question)
+
+    # Step 2: find the top_k most similar chunks in pgvector
+    repo = DocumentRepository(db)
+    rows = await repo.search_similar_chunks(query_vector, top_k=request.top_k)
