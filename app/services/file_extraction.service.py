@@ -23,3 +23,10 @@ async def extract_text(file: UploadFile) -> str:
 
     if filename.endswith(".txt"):
         return content.decode("utf-8", errors="ignore")
+    
+    elif filename.endswith(".pdf"):
+        import fitz  # PyMuPDF
+        doc = fitz.open(stream=content, filetype="pdf")
+        text = "\n".join(page.get_text() for page in doc)
+        doc.close()
+        return text
