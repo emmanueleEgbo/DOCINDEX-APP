@@ -20,3 +20,6 @@ async def extract_text(file: UploadFile) -> str:
     """
     filename = (file.filename or "").lower()
     content = await file.read()
+
+    if filename.endswith(".txt"):
+        return content.decode("utf-8", errors="ignore")
