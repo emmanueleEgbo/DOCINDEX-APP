@@ -30,3 +30,11 @@ async def query_documents(
     # Step 2: find the top_k most similar chunks in pgvector
     repo = DocumentRepository(db)
     rows = await repo.search_similar_chunks(query_vector, top_k=request.top_k)
+
+    # If the database is empty or no relevant chunks exist, return early
+    if not rows:
+        return QueryResponse(
+            question=request.question,
+            answer="I don't have enough information to answer that.",
+            sources=[],
+        )
