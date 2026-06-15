@@ -38,3 +38,14 @@ async def query_documents(
             answer="I don't have enough information to answer that.",
             sources=[],
         )
+    
+    # Convert raw DB rows into SourceChunk objects for the response
+    chunks = [
+        SourceChunk(
+            title=row.title,
+            source=row.source,
+            content=row.content,
+            similarity=round(float(row.similarity), 4),
+        )
+        for row in rows
+    ]
