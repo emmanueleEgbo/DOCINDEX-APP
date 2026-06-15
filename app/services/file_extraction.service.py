@@ -30,3 +30,10 @@ async def extract_text(file: UploadFile) -> str:
         text = "\n".join(page.get_text() for page in doc)
         doc.close()
         return text
+    
+    elif filename.endswith(".docx"):
+        from docx import Document
+        doc = Document(io.BytesIO(content))
+        return "\n".join(
+            para.text for para in doc.paragraphs if para.text.strip()
+        )
