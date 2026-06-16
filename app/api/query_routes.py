@@ -34,4 +34,11 @@ async def query(
     body: QueryRequest,
     db: AsyncSession = Depends(get_db),
 ) -> QueryResponse:
-   pass
+    try:
+        return await query_service.query_documents(db, body)
+    except RuntimeError as exc:
+        logger.error("Query pipeline failed: %s", exc)
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=str(exc),
+        )
