@@ -30,3 +30,8 @@ query_router = APIRouter(prefix="/v1/query", tags=["query"])
     Index documents first via POST /v1/documents before querying.
     """,
 )
+async def query(
+    body: QueryRequest,
+    db: AsyncSession = Depends(get_db),
+) -> QueryResponse:
+   pass
