@@ -25,3 +25,19 @@ from fastapi import FastAPI
 from app.api.document_routes import document_router
 from app.api.query_routes import query_router
 from app.core.database import get_db
+
+
+@pytest.fixture
+def mock_db():
+    """
+    A fake async database session.
+
+    Instead of the test runner  creating a real test database automatically,
+    In FastAPI, we control this ourselves. Here we use AsyncMock — an object
+    that pretends to be an async SQLAlchemy session. Any method called on it
+    (commit, execute, refresh, etc.) returns another mock by default.
+
+    This fixture is passed into the `client` fixture below, which wires it
+    into FastAPI's dependency injection system.
+    """
+    return AsyncMock()
