@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DocMind RAG</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 { font-size: 1.3rem; font-weight: 600; }
+    header span { font-size: 0.8rem; color: #8888bb; margin-top: 2px; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 0;
+      height: calc(100vh - 61px);
+    }
+
+    /* ── Left panel: Upload ── */
+    .panel-upload {
+      background: #fff;
+      border-right: 1px solid #e5e5e5;
+      padding: 24px 20px;
+      overflow-y: auto;
+    }
+    .panel-upload h2 { font-size: 0.95rem; font-weight: 600; margin-bottom: 16px; color: #444; }
+
+    label { display: block; font-size: 0.8rem; font-weight: 500; color: #555; margin-bottom: 4px; }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      outline: none;
+    }
+    input[type="text"]:focus { border-color: #4f46e5; }
+
+    .file-drop {
+      border: 2px dashed #d0d0d0;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    .file-drop:hover, .file-drop.active { border-color: #4f46e5; background: #f5f4ff; }
+    .file-drop p { font-size: 0.82rem; color: #888; }
+    .file-drop .file-name { font-size: 0.82rem; color: #4f46e5; font-weight: 500; margin-top: 6px; }
+
+    #file-input { display: none; }
+
+    btn, .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 9px;
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #4338ca; }
+    .btn:disabled { background: #a0a0c0; cursor: not-allowed; }
+
+    .upload-status {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      padding: 8px 10px;
+      border-radius: 6px;
+      display: none;
+    }
+    .upload-status.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .upload-status.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+
+    /* ── Right panel: Query ── */
+    .panel-query {
+      display: flex;
+      flex-direction: column;
+      background: #f9f9f9;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .empty-state {
+      margin: auto;
+      text-align: center;
+      color: #bbb;
+    }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 8px; }
+    .empty-state p { font-size: 0.9rem; }
+
+    .msg { display: flex; flex-direction: column; gap: 4px; max-width: 780px; }
+    .msg.user { align-self: flex-end; align-items: flex-end; }
+    .msg.assistant { align-self: flex-start; }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .msg.user .bubble     { background: #4f46e5; color: #fff; border-bottom-right-radius: 4px; }
+    .msg.assistant .bubble { background: #fff; border: 1px solid #e5e5e5; border-bottom-left-radius: 4px; }
+
+    .sources {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .source-label { font-size: 0.75rem; color: #888; font-weight: 500; }
+    .source-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-left: 3px solid #4f46e5;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      color: #555;
+    }
+    .source-card .source-title { font-weight: 600; color: #333; margin-bottom: 2px; }
+    .source-card .source-similarity { color: #888; font-size: 0.72rem; }
+
+    /* ── Input bar ── */
+    .input-bar {
+      border-top: 1px solid #e5e5e5;
+      padding: 16px 24px;
+      background: #fff;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .input-bar textarea {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      resize: none;
+      outline: none;
+      min-height: 42px;
+      max-height: 120px;
+      line-height: 1.5;
+      font-family: inherit;
+    }
+    .input-bar textarea:focus { border-color: #4f46e5; }
+    .send-btn {
+      padding: 10px 18px;
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .send-btn:hover { background: #4338ca; }
+    .send-btn:disabled { background: #a0a0c0; cursor: not-allowed; }
+
+    .thinking { color: #888; font-style: italic; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>DocMind RAG</h1>
+    <span>Ask questions about your indexed documents</span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ── Upload Panel ── -->
+  <aside class="panel-upload">
+    <h2>Index a Document</h2>
+
+    <label for="doc-title">Title (optional)</label>
+    <input type="text" id="doc-title" placeholder="Defaults to filename" />
+
+    <label for="doc-source">Source tag (optional)</label>
+    <input type="text" id="doc-source" placeholder="e.g. faq, manual, hr_policy" />
+
+    <label>File <span style="color:#888;font-weight:400">(.txt, .pdf, .docx)</span></label>
+    <div class="file-drop" id="file-drop" onclick="document.getElementById('file-input').click()">
+      <p>Click to choose a file</p>
+      <div class="file-name" id="file-name-display"></div>
+    </div>
+    <input type="file" id="file-input" accept=".txt,.pdf,.docx" />
+
+    <button class="btn" id="upload-btn" onclick="uploadFile()" disabled>Upload & Index</button>
+
+    <div class="upload-status" id="upload-status"></div>
+
+    <hr class="divider" />
+
+    <h2 style="margin-bottom:12px">Or paste raw text</h2>
+    <label for="raw-title">Title</label>
+    <input type="text" id="raw-title" placeholder="Document title" />
+
+    <label for="raw-source">Source tag (optional)</label>
+    <input type="text" id="raw-source" placeholder="e.g. faq" />
+
+    <label for="raw-content">Content</label>
+    <textarea id="raw-content" rows="6"
+      style="width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:6px;
+             font-size:0.82rem;resize:vertical;margin-bottom:12px;font-family:inherit;outline:none"
+      placeholder="Paste your document text here..."></textarea>
+
+    <button class="btn" onclick="indexRawText()">Index Text</button>
+    <div class="upload-status" id="raw-status"></div>
+  </aside>
+
+  <!-- ── Query Panel ── -->
+  <main class="panel-query">
+    <div class="messages" id="messages">
+      <div class="empty-state" id="empty-state">
+        <div class="icon">💬</div>
+        <p>Index a document on the left,<br/>then ask a question below.</p>
+      </div>
+    </div>
+
+    <div class="input-bar">
+      <textarea id="question-input" rows="1" placeholder="Ask a question about your documents..."
+        onkeydown="handleKey(event)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendQuery()">Send</button>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  const API = '';  // same origin — empty string means relative URL
+
+  // ── File picker ──────────────────────────────────────────────────────────
+  const fileInput = document.getElementById('file-input');
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    document.getElementById('file-name-display').textContent = file ? file.name : '';
+    document.getElementById('upload-btn').disabled = !file;
+  });
+
+  // ── File upload ──────────────────────────────────────────────────────────
+  async function uploadFile() {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const title  = document.getElementById('doc-title').value.trim();
+    const source = document.getElementById('doc-source').value.trim();
+
+    const formData = new FormData();
+    formData.append('file', file);
+    if (title)  formData.append('title', title);
+    if (source) formData.append('source', source);
+
+    setUploadStatus('upload-status', 'Uploading and indexing...', '');
+    document.getElementById('upload-btn').disabled = true;
+
+    try {
+      const res = await fetch(`${API}/v1/documents/upload`, { method: 'POST', body: formData });
+      const data = await res.json();
+      if (res.ok) {
+        setUploadStatus('upload-status',
+          `✓ Indexed "${data.title}" — ${data.chunk_count} chunks`, 'success');
+        fileInput.value = '';
+        document.getElementById('file-name-display').textContent = '';
+      } else {
+        setUploadStatus('upload-status', `Error: ${data.detail || 'Upload failed'}`, 'error');
+      }
+    } catch (e) {
+      setUploadStatus('upload-status', 'Network error — is the server running?', 'error');
+    } finally {
+      document.getElementById('upload-btn').disabled = false;
+    }
+  }
+
+  // ── Raw text index ───────────────────────────────────────────────────────
+  async function indexRawText() {
+    const title   = document.getElementById('raw-title').value.trim();
+    const source  = document.getElementById('raw-source').value.trim();
+    const content = document.getElementById('raw-content').value.trim();
+
+    if (!title || !content) {
+      setUploadStatus('raw-status', 'Title and content are required.', 'error');
+      return;
+    }
+
+    setUploadStatus('raw-status', 'Indexing...', '');
+    try {
+      const res = await fetch(`${API}/v1/documents`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, source: source || null }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUploadStatus('raw-status',
+          `✓ Indexed "${data.title}" — ${data.chunk_count} chunks`, 'success');
+        document.getElementById('raw-content').value = '';
+      } else {
+        setUploadStatus('raw-status', `Error: ${data.detail || 'Failed'}`, 'error');
+      }
+    } catch (e) {
+      setUploadStatus('raw-status', 'Network error — is the server running?', 'error');
+    }
+  }
+
+  function setUploadStatus(id, msg, type) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = `upload-status ${type}`;
+    el.style.display = msg ? 'block' : 'none';
+  }
+
+  // ── Query ────────────────────────────────────────────────────────────────
+  function handleKey(e) {
+    // Submit on Enter, allow Shift+Enter for new line
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendQuery();
+    }
+  }
+
+  async function sendQuery() {
+    const input = document.getElementById('question-input');
+    const question = input.value.trim();
+    if (!question) return;
+
+    input.value = '';
+    autoResize(input);
+
+    document.getElementById('empty-state')?.remove();
+
+    appendMessage('user', question);
+    const thinkingEl = appendMessage('assistant', 'Thinking...', true);
+    document.getElementById('send-btn').disabled = true;
+
+    try {
+      const res = await fetch(`${API}/v1/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, top_k: 5 }),
+      });
+      const data = await res.json();
+
+      thinkingEl.remove();
+
+      if (res.ok) {
+        appendMessage('assistant', data.answer, false, data.sources);
+      } else {
+        appendMessage('assistant', `Error: ${data.detail || 'Query failed'}`);
+      }
+    } catch (e) {
+      thinkingEl.remove();
+      appendMessage('assistant', 'Network error — is the server running?');
+    } finally {
+      document.getElementById('send-btn').disabled = false;
+    }
+  }
+
+  function appendMessage(role, text, thinking = false, sources = []) {
+    const messages = document.getElementById('messages');
+
+    const msg = document.createElement('div');
+    msg.className = `msg ${role}`;
+
+    const bubble = document.createElement('div');
+    bubble.className = `bubble${thinking ? ' thinking' : ''}`;
+    bubble.textContent = text;
+    msg.appendChild(bubble);
+
+    // Show source citations below the answer
+    if (sources && sources.length > 0) {
+      const sourcesDiv = document.createElement('div');
+      sourcesDiv.className = 'sources';
+
+      const label = document.createElement('div');
+      label.className = 'source-label';
+      label.textContent = `Sources used (${sources.length})`;
+      sourcesDiv.appendChild(label);
+
+      sources.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'source-card';
+        card.innerHTML = `
+          <div class="source-title">${s.title}${s.source ? ` · ${s.source}` : ''}</div>
+          <div class="source-similarity">Similarity: ${(s.similarity * 100).toFixed(1)}%</div>
+          <div style="margin-top:4px">${s.content.slice(0, 160)}${s.content.length > 160 ? '…' : ''}</div>
+        `;
+        sourcesDiv.appendChild(card);
+      });
+
+      msg.appendChild(sourcesDiv);
+    }
+
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+    return msg;
+  }
+
+  // Auto-resize the textarea as user types
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+  document.getElementById('question-input').addEventListener('input', function () {
+    autoResize(this);
+  });
+</script>
+
+</body>
+</html>
