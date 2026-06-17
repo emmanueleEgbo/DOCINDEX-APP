@@ -16,3 +16,12 @@ It's a decorator that tells pytest: "this function is not a test — it's a reus
   - ASGITransport      : tells httpx to talk directly to the FastAPI app in-process
                          (no real HTTP server needed — equivalent to Django's test client)
 """
+import pytest
+import pytest_asyncio
+from unittest.mock import AsyncMock
+from httpx import AsyncClient, ASGITransport
+from fastapi import FastAPI
+
+from app.api.document_routes import document_router
+from app.api.query_routes import query_router
+from app.core.database import get_db
