@@ -56,3 +56,7 @@ class TestChunkText:
         # the step between chunks would be zero or negative
         with pytest.raises(ValueError, match="overlap"):
             chunk_text("some text", chunk_size=5, overlap=5)
+    
+    def test_overlap_greater_than_chunk_size_raises(self):
+        with pytest.raises(ValueError, match="overlap"):
+            chunk_text("some text", chunk_size=5, overlap=10)
