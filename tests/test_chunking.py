@@ -60,3 +60,7 @@ class TestChunkText:
     def test_overlap_greater_than_chunk_size_raises(self):
         with pytest.raises(ValueError, match="overlap"):
             chunk_text("some text", chunk_size=5, overlap=10)
+
+    def test_returns_list_of_strings(self):
+        chunks = chunk_text("hello world", chunk_size=10, overlap=1)
+        assert isinstance(chunks, list)
