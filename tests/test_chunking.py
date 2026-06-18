@@ -9,3 +9,5 @@ We group tests into classes purely for organisation — unlike Django's TestCase
 these classes do NOT need to inherit from anything. pytest discovers and runs
 any function starting with `test_` inside any class starting with `Test`.
 """
+import pytest
+from app.services.chunking_service import clean_text, chunk_text
