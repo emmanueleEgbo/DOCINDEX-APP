@@ -11,3 +11,23 @@ any function starting with `test_` inside any class starting with `Test`.
 """
 import pytest
 from app.services.chunking_service import clean_text, chunk_text
+
+
+class TestCleanText:
+    def test_collapses_multiple_spaces(self):
+        assert clean_text("hello   world") == "hello world"
+
+    def test_collapses_newlines(self):
+        assert clean_text("line1\nline2\n\nline3") == "line1 line2 line3"
+
+    def test_collapses_tabs(self):
+        assert clean_text("col1\tcol2") == "col1 col2"
+
+    def test_strips_leading_and_trailing_whitespace(self):
+        assert clean_text("  hello  ") == "hello"
+
+    def test_removes_null_byte(self):
+        assert clean_text("hello\x00world") == "helloworld"
+
+    def test_empty_string_returns_empty(self):
+        assert clean_text("") == ""
