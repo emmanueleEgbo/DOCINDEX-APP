@@ -31,3 +31,10 @@ class TestCleanText:
 
     def test_empty_string_returns_empty(self):
         assert clean_text("") == ""
+
+
+class TestChunkText:
+    def test_short_text_produces_one_chunk(self):
+        chunks = chunk_text("short text", chunk_size=50, overlap=5)
+        assert len(chunks) == 1
+        assert chunks[0] == "short text"
