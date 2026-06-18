@@ -38,3 +38,9 @@ class TestChunkText:
         chunks = chunk_text("short text", chunk_size=50, overlap=5)
         assert len(chunks) == 1
         assert chunks[0] == "short text"
+
+    def test_long_text_produces_multiple_chunks(self):
+        # chunk_size=10 tokens × 4 chars/token = 40 chars per chunk
+        # 200 chars of text should produce more than one chunk
+        chunks = chunk_text("a" * 200, chunk_size=10, overlap=2)
+        assert len(chunks) > 1
