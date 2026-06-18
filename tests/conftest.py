@@ -81,3 +81,12 @@ async def client(mock_db):
         yield mock_db  # `yield` makes this a FastAPI dependency that can be injected
     
     app.dependency_overrides[get_db] = override_get_db
+
+    # AsyncClient with ASGITransport = in-process HTTP client, no real server needed
+    # `async with` ensures the client is properly opened and closed around the test
+    async with AsyncClient(
+        transport=ASGITransport(app=app), # tells httpx to talk directly to the FastAPI app in memory, skipping
+        # any real HTTP server or port. This is the FastAPI equivalent of Django's self.client in test cases.
+        base_url="http://test",  # fake base URL — required by httpx but never actually called
+    ) as ac:
+        yield ac  # hand the client to the test function, then clean up after
