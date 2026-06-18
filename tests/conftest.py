@@ -79,3 +79,5 @@ async def client(mock_db):
     # of Django's database mocking or fixture overrides
     async def override_get_db():
         yield mock_db  # `yield` makes this a FastAPI dependency that can be injected
+    
+    app.dependency_overrides[get_db] = override_get_db
