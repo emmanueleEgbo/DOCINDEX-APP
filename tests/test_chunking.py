@@ -44,3 +44,9 @@ class TestChunkText:
         # 200 chars of text should produce more than one chunk
         chunks = chunk_text("a" * 200, chunk_size=10, overlap=2)
         assert len(chunks) > 1
+
+    def test_no_chunk_exceeds_max_size(self):
+        chunks = chunk_text("a" * 400, chunk_size=10, overlap=2)
+        max_chars = 10 * 4  # 40 characters
+        for chunk in chunks:
+            assert len(chunk) <= max_chars
