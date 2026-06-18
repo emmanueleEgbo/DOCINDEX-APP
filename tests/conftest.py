@@ -74,3 +74,8 @@ async def client(mock_db):
     app = FastAPI()
     app.include_router(document_router)
     app.include_router(query_router)
+
+    # Swap the real DB dependency for our mock — this is FastAPI's equivalent
+    # of Django's database mocking or fixture overrides
+    async def override_get_db():
+        yield mock_db  # `yield` makes this a FastAPI dependency that can be injected
