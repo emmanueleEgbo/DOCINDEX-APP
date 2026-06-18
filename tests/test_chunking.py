@@ -50,3 +50,9 @@ class TestChunkText:
         max_chars = 10 * 4  # 40 characters
         for chunk in chunks:
             assert len(chunk) <= max_chars
+
+    def test_overlap_equal_to_chunk_size_raises(self):
+        # overlap must be strictly less than chunk_size, otherwise
+        # the step between chunks would be zero or negative
+        with pytest.raises(ValueError, match="overlap"):
+            chunk_text("some text", chunk_size=5, overlap=5)
