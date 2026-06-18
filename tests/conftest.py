@@ -41,3 +41,32 @@ def mock_db():
     into FastAPI's dependency injection system.
     """
     return AsyncMock()
+
+
+async def client(mock_db):
+    """
+    A test HTTP client pre-wired to a minimal FastAPI app, client here is just the test's way of making HTTP requests to your app.
+    Instead of doing:
+    real browser → real server → real database
+    It does:
+    fake client → app in memory → fake database
+
+    Why we build a separate app instead of importing app from main.py:
+      - main.py has a lifespan() that connects to a real PostgreSQL on startup.
+        Using it in tests would require a real running database.
+      - Instead, we create a fresh FastAPI app with only the routes we want to
+        test, and inject a mock database session. Clean and isolated.
+
+    How dependency injection override works:
+      - In production, FastAPI calls get_db() to get a real database session.
+      - app.dependency_overrides[get_db] = override_get_db replaces that function
+        with our fake version for the duration of the test.
+      - Every route that has `db: AsyncSession = Depends(get_db)` will receive
+        our mock_db instead of a real connection.
+
+    ASGITransport:
+      - FastAPI is an ASGI application (async server gateway interface).
+      - ASGITransport lets httpx talk directly to the ASGI app in memory,
+        without starting a real HTTP server on a port.
+      - Equivalent to Django's `self.client` which bypasses the network layer.
+    """
