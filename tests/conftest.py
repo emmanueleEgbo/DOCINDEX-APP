@@ -70,3 +70,7 @@ async def client(mock_db):
         without starting a real HTTP server on a port.
       - Equivalent to Django's `self.client` which bypasses the network layer.
     """
+    # Build a minimal app with only the routes we need — no lifespan, no DB startup
+    app = FastAPI()
+    app.include_router(document_router)
+    app.include_router(query_router)
