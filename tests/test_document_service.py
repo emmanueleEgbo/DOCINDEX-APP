@@ -96,3 +96,15 @@ class TestGetAllDocuments:
 
         assert len(result) == 1
         assert result[0].title == "Test Doc"
+
+    async def test_returns_empty_list_when_no_documents(self, mock_db):
+        from app.services import document_service
+
+        with patch("app.services.document_service.DocumentRepository") as MockRepo:
+            mock_repo = AsyncMock()
+            mock_repo.get_document_summaries.return_value = []
+            MockRepo.return_value = mock_repo
+
+            result = await document_service.get_all_documents(mock_db)
+
+        assert result == []
