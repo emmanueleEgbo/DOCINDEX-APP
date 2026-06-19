@@ -123,3 +123,16 @@ class TestDeleteDocument:
 
         # True means rows were found and deleted
         assert result is True
+    
+    async def test_returns_false_when_not_found(self, mock_db):
+        from app.services import document_service
+
+        with patch("app.services.document_service.DocumentRepository") as MockRepo:
+            mock_repo = AsyncMock()
+            mock_repo.delete_by_source_id.return_value = False
+            MockRepo.return_value = mock_repo
+
+            result = await document_service.delete_document(mock_db, "nonexistent")
+
+        # False means no rows matched — document didn't exist
+        assert result is False
