@@ -81,3 +81,18 @@ class TestIndexDocument:
 
         # uuid.UUID() raises ValueError if source_document_id is not a valid UUID format
         uuid.UUID(result.source_document_id)
+
+
+class TestGetAllDocuments:
+    async def test_returns_list_from_repository(self, mock_db, sample_summary):
+        from app.services import document_service
+
+        with patch("app.services.document_service.DocumentRepository") as MockRepo:
+            mock_repo = AsyncMock()
+            mock_repo.get_document_summaries.return_value = [sample_summary]
+            MockRepo.return_value = mock_repo
+
+            result = await document_service.get_all_documents(mock_db)
+
+        assert len(result) == 1
+        assert result[0].title == "Test Doc"
