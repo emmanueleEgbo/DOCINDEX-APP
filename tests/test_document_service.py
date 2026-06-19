@@ -36,3 +36,26 @@ def sample_create():
         content="Hello world " * 20,
         source="test",
     )
+
+
+class TestIndexDocument:
+    async def test_returns_indexing_response(self, mock_db, sample_create):
+        from app.services import document_service
+
+        with patch("app.services.document_service.embed_batch", new_callable=AsyncMock) as mock_embed, \
+             patch("app.services.document_service.DocumentRepository") as MockRepo:
+
+            # embed_batch return value doesn't matter — it is passed straight into
+            # the mocked create_chunks which ignores its arguments entirely.
+            # We still need the mock so the real OpenAI call is never made.
+            mock_embed.return_value = []
+
+            mock_repo = AsyncMock()
+            mock_repo.create_chunks.return_value = [None] * 5 
+            MockRepo.return_value = mock_repo
+
+            result = await document_service.index_document(mock_db, sample_create)
+
+        assert isinstance(result, IndexingResponse)
+        assert result.title == "Test Doc"
+        assert result.chunk_count >= 1
