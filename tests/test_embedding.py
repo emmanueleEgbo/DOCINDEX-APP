@@ -43,3 +43,18 @@ class TestEmbedBatch:
         # embed_batch has an early return for empty input — no API call made
         result = await embed_batch([])
         assert result == []
+
+    async def test_returns_one_vector_per_text(self):
+        from app.services.embedding_service import embed_batch, _client
+
+        texts = ["chunk one", "chunk two", "chunk three"]
+
+        # patch.object(target, attribute) temporarily replaces _client.embeddings.create
+        # with an AsyncMock for the duration of the `with` block.
+        # After the block exits, the real method is restored automatically.
+        # This is equivalent to Django's @mock.patch decorator but used as a context manager.
+        with patch.object(_client.embeddings, "create", new_callable=AsyncMock) as mock_create:
+            mock_create.return_value = make_openai_response(3)
+            result = await embed_batch(texts)
+
+        assert len(result) == 3
