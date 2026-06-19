@@ -26,3 +26,13 @@ from datetime import datetime
 from unittest.mock import AsyncMock, patch
 
 from app.schemas.document_schema import DocumentCreate, DocumentSummary, IndexingResponse
+
+
+@pytest.fixture
+def sample_create():
+    """A valid DocumentCreate input — reused across multiple tests."""
+    return DocumentCreate(
+        title="Test Doc",
+        content="Hello world " * 20,
+        source="test",
+    )
