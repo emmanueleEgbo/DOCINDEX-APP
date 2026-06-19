@@ -12,3 +12,5 @@ Key mocking tools used:
   - AsyncMock                        : a mock that is awaitable (needed for async functions)
   - MagicMock                        : a mock for regular (non-async) objects and attributes
 """
+import pytest
+from unittest.mock import AsyncMock, MagicMock, patch
