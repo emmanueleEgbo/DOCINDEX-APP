@@ -59,3 +59,25 @@ class TestIndexDocument:
         assert isinstance(result, IndexingResponse)
         assert result.title == "Test Doc"
         assert result.chunk_count >= 1
+
+
+    async def test_source_document_id_is_a_uuid_string(self, mock_db, sample_create):
+        """
+        The service generates a UUID for each document. Verify it's a valid UUID
+        by trying to parse it — uuid.UUID() raises ValueError if the format is wrong.
+        """
+        from app.services import document_service
+
+        with patch("app.services.document_service.embed_batch", new_callable=AsyncMock) as mock_embed, \
+             patch("app.services.document_service.DocumentRepository") as MockRepo:
+
+            mock_embed.return_value = []
+
+            mock_repo = AsyncMock()
+            mock_repo.create_chunks.return_value = [None] * 5
+            MockRepo.return_value = mock_repo
+
+            result = await document_service.index_document(mock_db, sample_create)
+
+        # uuid.UUID() raises ValueError if source_document_id is not a valid UUID format
+        uuid.UUID(result.source_document_id)
