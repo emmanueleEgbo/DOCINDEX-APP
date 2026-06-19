@@ -108,3 +108,18 @@ class TestGetAllDocuments:
             result = await document_service.get_all_documents(mock_db)
 
         assert result == []
+
+
+class TestDeleteDocument:
+    async def test_returns_true_when_deleted(self, mock_db):
+        from app.services import document_service
+
+        with patch("app.services.document_service.DocumentRepository") as MockRepo:
+            mock_repo = AsyncMock()
+            mock_repo.delete_by_source_id.return_value = True
+            MockRepo.return_value = mock_repo
+
+            result = await document_service.delete_document(mock_db, "abc-123")
+
+        # True means rows were found and deleted
+        assert result is True
