@@ -20,3 +20,9 @@ Mock setup pattern used consistently throughout this file:
     mock_repo.some_method.return_value = result    # 2. tell it what to return
     MockRepo.return_value = mock_repo              # 3. make the class return that instance
 """
+import pytest
+import uuid
+from datetime import datetime
+from unittest.mock import AsyncMock, patch
+
+from app.schemas.document_schema import DocumentCreate, DocumentSummary, IndexingResponse
