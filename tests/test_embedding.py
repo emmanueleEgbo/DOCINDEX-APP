@@ -14,3 +14,24 @@ Key mocking tools used:
 """
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
+
+
+def make_openai_response(n: int, value: float = 0.1):
+    """
+    Build a fake OpenAI embeddings API response.
+
+    The real OpenAI response looks like:
+        response.data = [
+            Embedding(index=0, embedding=[0.1, 0.2, ...]),
+            Embedding(index=1, embedding=[0.3, 0.4, ...]),
+        ]
+
+    MagicMock() creates an object that accepts any attribute access or method call,
+    making it easy to fake complex nested objects like API responses.
+    """
+    response = MagicMock()
+    response.data = [
+        MagicMock(index=i, embedding=[value] * 1536)
+        for i in range(n)
+    ]
+    return response
