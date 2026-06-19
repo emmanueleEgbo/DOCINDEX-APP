@@ -35,3 +35,11 @@ def make_openai_response(n: int, value: float = 0.1):
         for i in range(n)
     ]
     return response
+
+
+class TestEmbedBatch:
+    async def test_empty_input_returns_empty_list(self):
+        from app.services.embedding_service import embed_batch
+        # embed_batch has an early return for empty input — no API call made
+        result = await embed_batch([])
+        assert result == []
