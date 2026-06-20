@@ -67,3 +67,13 @@ class TestEmbedBatch:
             result = await embed_batch(["text a", "text b"])
 
         assert all(len(vec) == 1536 for vec in result)
+
+    async def test_api_error_raises_runtime_error(self):
+        from app.services.embedding_service import embed_batch, _client
+
+        # side_effect makes the mock raise an exception when called,
+        # simulating an OpenAI API failure (timeout, rate limit, etc.)
+        with patch.object(_client.embeddings, "create", new_callable=AsyncMock) as mock_create:
+            mock_create.side_effect = Exception("API timeout")
+            with pytest.raises(RuntimeError, match="Embedding API failed"):
+                await embed_batch(["some text"])
