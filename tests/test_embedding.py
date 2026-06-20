@@ -77,3 +77,28 @@ class TestEmbedBatch:
             mock_create.side_effect = Exception("API timeout")
             with pytest.raises(RuntimeError, match="Embedding API failed"):
                 await embed_batch(["some text"])
+
+    async def test_output_order_matches_input_order(self):
+        """
+        The OpenAI API guarantees order via the `index` field, not by the order
+        returned in the response. embed_batch() sorts by index explicitly.
+        This test verifies that sorting works correctly.
+        """
+        from app.services.embedding_service import embed_batch, _client
+
+        # Return embeddings in reverse index order to simulate out-of-order API response
+        response = MagicMock()
+        response.data = [
+            MagicMock(index=2, embedding=[0.3] * 1536),  # last item returned first
+            MagicMock(index=0, embedding=[0.1] * 1536),  # first item returned second
+            MagicMock(index=1, embedding=[0.2] * 1536),  # middle item returned last
+        ]
+        with patch.object(_client.embeddings, "create", new_callable=AsyncMock) as mock_create:
+            mock_create.return_value = response
+            result = await embed_batch(["a", "b", "c"])
+
+        # After sorting by index, order should be: 0.1, 0.2, 0.3
+        # pytest.approx() handles floating point comparison safely
+        assert pytest.approx(result[0][0]) == 0.1  # index 0
+        assert pytest.approx(result[1][0]) == 0.2  # index 1
+        assert pytest.approx(result[2][0]) == 0.3  # index 2
