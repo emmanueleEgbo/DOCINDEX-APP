@@ -58,3 +58,12 @@ class TestEmbedBatch:
             result = await embed_batch(texts)
 
         assert len(result) == 3
+
+    async def test_each_vector_has_1536_dimensions(self):
+        from app.services.embedding_service import embed_batch, _client
+
+        with patch.object(_client.embeddings, "create", new_callable=AsyncMock) as mock_create:
+            mock_create.return_value = make_openai_response(2)
+            result = await embed_batch(["text a", "text b"])
+
+        assert all(len(vec) == 1536 for vec in result)
