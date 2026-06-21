@@ -48,3 +48,10 @@ class TestQueryRoute:
     async def test_returns_422_on_missing_question(self, client):
         response = await client.post("/v1/query", json={})
         assert response.status_code == 422
+
+    async def test_returns_502_on_llm_or_embedding_failure(self, client, valid_body):
+        with patch("app.services.query_service.query_documents", new_callable=AsyncMock) as mock_query:
+            mock_query.side_effect = RuntimeError("OpenAI timeout")
+            response = await client.post("/v1/query", json=valid_body)
+
+        assert response.status_code == 502
