@@ -40,3 +40,7 @@ class TestQueryRoute:
         assert "refund" in data["answer"]
         assert len(data["sources"]) == 1
         assert data["sources"][0]["title"] == "Acme Corp FAQ"
+
+    async def test_returns_422_on_empty_question(self, client):
+        response = await client.post("/v1/query", json={"question": ""})
+        assert response.status_code == 422
