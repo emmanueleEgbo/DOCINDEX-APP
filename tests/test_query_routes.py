@@ -55,3 +55,16 @@ class TestQueryRoute:
             response = await client.post("/v1/query", json=valid_body)
 
         assert response.status_code == 502
+
+    async def test_returns_empty_sources_when_no_documents_indexed(self, client, valid_body):
+        """When the DB has no documents, the service returns an early response with no sources."""
+        with patch("app.services.query_service.query_documents", new_callable=AsyncMock) as mock_query:
+            mock_query.return_value = QueryResponse(
+                question="What is the refund policy?",
+                answer="I don't have enough information to answer that.",
+                sources=[],
+            )
+            response = await client.post("/v1/query", json=valid_body)
+
+        assert response.status_code == 200
+        assert response.json()["sources"] == []
