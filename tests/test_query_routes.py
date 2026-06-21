@@ -44,3 +44,7 @@ class TestQueryRoute:
     async def test_returns_422_on_empty_question(self, client):
         response = await client.post("/v1/query", json={"question": ""})
         assert response.status_code == 422
+
+    async def test_returns_422_on_missing_question(self, client):
+        response = await client.post("/v1/query", json={})
+        assert response.status_code == 422
