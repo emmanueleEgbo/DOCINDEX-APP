@@ -6,3 +6,6 @@ Mocks:
   - DocumentRepository → avoid real DB query
   - generate_answer → avoid real LLM call
 """
+import pytest
+from unittest.mock import AsyncMock, MagicMock, patch
+from app.schemas.query_schema import QueryRequest, QueryResponse
