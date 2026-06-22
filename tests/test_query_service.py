@@ -24,3 +24,12 @@ def sample_rows():
     row.content = "We offer a 30-day full refund on all purchases."
     row.similarity = 0.94
     return [row]
+
+
+class TestQueryDocuments:
+    async def test_returns_query_response(self, mock_db, sample_request, sample_rows):
+        from app.services import query_service
+
+        with patch("app.services.query_service.embed_text", new_callable=AsyncMock) as mock_embed, \
+             patch("app.services.query_service.DocumentRepository") as MockRepo, \
+             patch("app.services.query_service.generate_answer", new_callable=AsyncMock) as mock_llm:
