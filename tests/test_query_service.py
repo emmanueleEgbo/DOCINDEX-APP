@@ -43,3 +43,8 @@ class TestQueryDocuments:
             mock_llm.return_value = "We offer a 30-day full refund on all purchases."
 
             result = await query_service.query_documents(mock_db, sample_request)
+
+        assert isinstance(result, QueryResponse)
+        assert result.answer == "We offer a 30-day full refund on all purchases."
+        assert len(result.sources) == 1
+        assert result.sources[0].title == "Acme Corp FAQ"
