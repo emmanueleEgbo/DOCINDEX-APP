@@ -48,3 +48,14 @@ class TestQueryDocuments:
         assert result.answer == "We offer a 30-day full refund on all purchases."
         assert len(result.sources) == 1
         assert result.sources[0].title == "Acme Corp FAQ"
+    async def test_returns_early_when_no_chunks_found(self, mock_db, sample_request):
+        """If pgvector finds no matching chunks, return a canned response immediately."""
+        from app.services import query_service
+
+        with patch("app.services.query_service.embed_text", new_callable=AsyncMock) as mock_embed, \
+             patch("app.services.query_service.DocumentRepository") as MockRepo, \
+             patch("app.services.query_service.generate_answer", new_callable=AsyncMock) as mock_llm:
+
+            mock_embed.return_value = [0.1] * 1536
+
+           
