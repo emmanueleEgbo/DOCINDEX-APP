@@ -58,4 +58,13 @@ class TestQueryDocuments:
 
             mock_embed.return_value = [0.1] * 1536
 
-           
+            mock_repo = AsyncMock()
+            mock_repo.search_similar_chunks.return_value = []  # nothing in the DB
+            MockRepo.return_value = mock_repo
+
+            result = await query_service.query_documents(mock_db, sample_request)
+
+        # LLM should never be called if there are no chunks to pass as context
+        mock_llm.assert_not_called()
+        assert result.sources == []
+        assert "don't have enough information" in result.answer
