@@ -68,3 +68,6 @@ class TestQueryDocuments:
         mock_llm.assert_not_called()
         assert result.sources == []
         assert "don't have enough information" in result.answer
+    
+    async def test_similarity_score_is_rounded(self, mock_db, sample_request, sample_rows):
+        """Similarity is rounded to 4 decimal places before returning."""
