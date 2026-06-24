@@ -71,3 +71,7 @@ class TestQueryDocuments:
     
     async def test_similarity_score_is_rounded(self, mock_db, sample_request, sample_rows):
         """Similarity is rounded to 4 decimal places before returning."""
+
+        from app.services import query_service
+
+        sample_rows[0].similarity = 0.938271828
