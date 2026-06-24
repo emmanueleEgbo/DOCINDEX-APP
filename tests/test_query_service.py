@@ -75,3 +75,8 @@ class TestQueryDocuments:
         from app.services import query_service
 
         sample_rows[0].similarity = 0.938271828
+
+        with patch("app.services.query_service.embed_text", new_callable=AsyncMock) as mock_embed, \
+             patch("app.services.query_service.DocumentRepository") as MockRepo, \
+             patch("app.services.query_service.generate_answer", new_callable=AsyncMock) as mock_llm:
+
