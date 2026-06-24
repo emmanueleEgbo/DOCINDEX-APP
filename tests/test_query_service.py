@@ -86,3 +86,7 @@ class TestQueryDocuments:
             MockRepo.return_value = mock_repo
             mock_llm.return_value = "Some answer."
 
+            result = await query_service.query_documents(mock_db, sample_request)
+
+        assert result.sources[0].similarity == round(0.938271828, 4)
+
