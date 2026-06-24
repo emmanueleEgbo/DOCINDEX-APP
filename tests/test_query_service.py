@@ -80,3 +80,9 @@ class TestQueryDocuments:
              patch("app.services.query_service.DocumentRepository") as MockRepo, \
              patch("app.services.query_service.generate_answer", new_callable=AsyncMock) as mock_llm:
 
+            mock_embed.return_value = [0.1] * 1536
+            mock_repo = AsyncMock()
+            mock_repo.search_similar_chunks.return_value = sample_rows
+            MockRepo.return_value = mock_repo
+            mock_llm.return_value = "Some answer."
+
