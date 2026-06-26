@@ -18,3 +18,19 @@ Why mock the service and not the DB directly?
 The `client` fixture (from conftest.py) provides an httpx.AsyncClient connected
 to our test FastAPI app. It is injected automatically by pytest.
 """
+import pytest
+from datetime import datetime
+from unittest.mock import AsyncMock, patch
+
+from app.schemas.document_schema import DocumentSummary, IndexingResponse
+
+
+@pytest.fixture
+def valid_body():
+    """A valid POST /v1/documents request body."""
+    return {
+        "title": "Test Document",
+        "content": "This is meaningful content for testing the indexing pipeline.",
+        "source": "test",
+    }
+
