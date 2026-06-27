@@ -34,5 +34,14 @@ def valid_body():
         "source": "test",
     }
 
-
+@pytest.fixture
+def sample_summary():
+    """A fake DocumentSummary that mocked service functions return."""
+    return DocumentSummary(
+        source_document_id="abc-123",
+        title="Test Document",
+        source="test",
+        chunk_count=5,
+        created_at=datetime.utcnow(),
+    )
 
