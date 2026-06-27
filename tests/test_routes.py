@@ -185,3 +185,23 @@ class TestUploadDocumentRoute:
         )
 
         assert response.status_code == 422
+
+
+class TestDeleteDocumentRoute:
+    async def test_returns_204_when_deleted(self, client):
+        """
+        204 No Content — successful delete with no response body.
+        This is the REST convention for DELETE operations.
+        """
+        with patch("app.services.document_service.delete_document", new_callable=AsyncMock) as mock_delete:
+            mock_delete.return_value = True  # rows were deleted
+            response = await client.delete("/v1/documents/abc-123")
+
+        assert response.status_code == 204
+
+    async def test_returns_404_when_document_not_found(self, client):
+        with patch("app.services.document_service.delete_document", new_callable=AsyncMock) as mock_delete:
+            mock_delete.return_value = False  # nothing to delete
+            response = await client.delete("/v1/documents/nonexistent")
+
+        assert response.status_code == 404
