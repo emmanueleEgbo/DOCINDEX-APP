@@ -54,3 +54,14 @@ def sample_indexing_response():
         chunk_count=5,
         message="Document indexed successfully into 5 chunks.",
     )
+
+
+class TestIndexDocumentRoute:
+    async def test_returns_201_on_success(self, client, valid_body, sample_indexing_response):
+        """
+        Happy path: valid request body → service returns success → route returns 201.
+
+        patch() here replaces the real index_document function with an AsyncMock
+        that immediately returns our fake response. The route handler doesn't know
+        it's talking to a mock — it just gets back the IndexingResponse and returns it.
+        """
