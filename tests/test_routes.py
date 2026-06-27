@@ -122,3 +122,12 @@ class TestListDocumentsRoute:
         assert response.status_code == 200
         assert len(response.json()) == 1
         assert response.json()[0]["title"] == "Test Document"
+
+    async def test_returns_empty_list_when_no_documents(self, client):
+        # An empty database is a valid state — returns 200 with []
+        with patch("app.services.document_service.get_all_documents", new_callable=AsyncMock) as mock_list:
+            mock_list.return_value = []
+            response = await client.get("/v1/documents")
+
+        assert response.status_code == 200
+        assert response.json() == []
