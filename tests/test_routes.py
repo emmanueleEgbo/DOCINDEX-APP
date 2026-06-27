@@ -34,6 +34,7 @@ def valid_body():
         "source": "test",
     }
 
+
 @pytest.fixture
 def sample_summary():
     """A fake DocumentSummary that mocked service functions return."""
@@ -83,5 +84,12 @@ class TestIndexDocumentRoute:
         response = await client.post("/v1/documents", json={
             "title": "Test",
             "content": "",  # rejected by @field_validator in DocumentCreate
+        })
+        assert response.status_code == 422
+    
+    async def test_returns_422_on_whitespace_content(self, client):
+        response = await client.post("/v1/documents", json={
+            "title": "Test",
+            "content": "   ",
         })
         assert response.status_code == 422
