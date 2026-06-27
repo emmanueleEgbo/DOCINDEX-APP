@@ -68,3 +68,8 @@ class TestIndexDocumentRoute:
         with patch("app.services.document_service.index_document", new_callable=AsyncMock) as mock_index:
             mock_index.return_value = sample_indexing_response
             response = await client.post("/v1/documents", json=valid_body)
+
+        assert response.status_code == 201
+        data = response.json()
+        assert data["source_document_id"] == "abc-123"
+        assert data["chunk_count"] == 5
