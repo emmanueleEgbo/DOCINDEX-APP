@@ -45,3 +45,12 @@ def sample_summary():
         created_at=datetime.utcnow(),
     )
 
+@pytest.fixture
+def sample_indexing_response():
+    """A fake IndexingResponse that the mocked index_document returns."""
+    return IndexingResponse(
+        source_document_id="abc-123",
+        title="Test Document",
+        chunk_count=5,
+        message="Document indexed successfully into 5 chunks.",
+    )
