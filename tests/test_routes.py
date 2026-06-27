@@ -117,3 +117,8 @@ class TestListDocumentsRoute:
         with patch("app.services.document_service.get_all_documents", new_callable=AsyncMock) as mock_list:
             mock_list.return_value = [sample_summary]
             response = await client.get("/v1/documents")
+
+        
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()[0]["title"] == "Test Document"
