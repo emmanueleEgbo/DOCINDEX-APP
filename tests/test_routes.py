@@ -110,3 +110,10 @@ class TestIndexDocumentRoute:
             response = await client.post("/v1/documents", json=valid_body)
 
         assert response.status_code == 502
+
+
+class TestListDocumentsRoute:
+    async def test_returns_200_with_document_list(self, client, sample_summary):
+        with patch("app.services.document_service.get_all_documents", new_callable=AsyncMock) as mock_list:
+            mock_list.return_value = [sample_summary]
+            response = await client.get("/v1/documents")
