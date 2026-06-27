@@ -98,3 +98,15 @@ class TestIndexDocumentRoute:
         # `title` is a required field — omitting it causes a 422
         response = await client.post("/v1/documents", json={"content": "Some content."})
         assert response.status_code == 422
+    
+    async def test_returns_502_on_embedding_api_failure(self, client, valid_body):
+        """
+        If the OpenAI embedding API fails, the service raises RuntimeError.
+        The route handler catches this and returns 502 Bad Gateway.
+        This test verifies that error mapping is correct.
+        """
+        with patch("app.services.document_service.index_document", new_callable=AsyncMock) as mock_index:
+            mock_index.side_effect = RuntimeError("OpenAI timeout")
+            response = await client.post("/v1/documents", json=valid_body)
+
+        assert response.status_code == 502
