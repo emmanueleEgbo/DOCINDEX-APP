@@ -73,3 +73,15 @@ class TestIndexDocumentRoute:
         data = response.json()
         assert data["source_document_id"] == "abc-123"
         assert data["chunk_count"] == 5
+    
+    async def test_returns_422_on_empty_content(self, client):
+        """
+        422 Unprocessable Entity — Pydantic validation rejects the request
+        BEFORE it even reaches the route handler. No mocking needed because
+        the service is never called.
+        """
+        response = await client.post("/v1/documents", json={
+            "title": "Test",
+            "content": "",  # rejected by @field_validator in DocumentCreate
+        })
+        assert response.status_code == 422
