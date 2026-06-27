@@ -93,3 +93,8 @@ class TestIndexDocumentRoute:
             "content": "   ",
         })
         assert response.status_code == 422
+    
+    async def test_returns_422_on_missing_title(self, client):
+        # `title` is a required field — omitting it causes a 422
+        response = await client.post("/v1/documents", json={"content": "Some content."})
+        assert response.status_code == 422
