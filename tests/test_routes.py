@@ -152,3 +152,36 @@ class TestGetDocumentRoute:
             response = await client.get("/v1/documents/nonexistent")
 
         assert response.status_code == 404
+
+
+class TestUploadDocumentRoute:
+    async def test_returns_201_on_valid_txt_upload(self, client, sample_indexing_response):
+        """
+        Happy path: upload a .txt file → text is extracted → service indexes it → 201 returned.
+
+        We let extract_text run for real (it just decodes bytes for .txt — no external calls).
+        We only mock index_document to avoid hitting OpenAI and the database.
+        """
+        with patch("app.services.document_service.index_document", new_callable=AsyncMock) as mock_index:
+            mock_index.return_value = sample_indexing_response
+            response = await client.post(
+                "/v1/documents/upload",
+                files={"file": ("report.txt", b"Annual report content goes here.", "text/plain")},
+                data={"title": "Annual Report", "source": "hr"},
+            )
+
+        assert response.status_code == 201
+        assert response.json()["chunk_count"] == 5
+
+    async def test_returns_422_on_unsupported_file_type(self, client):
+        """
+        If the uploaded file is not .txt/.pdf/.docx, extract_text raises ValueError.
+        The route handler catches it and returns 422 — no mocking needed because
+        the error is raised before index_document is ever called.
+        """
+        response = await client.post(
+            "/v1/documents/upload",
+            files={"file": ("data.csv", b"col1,col2\n1,2", "text/csv")},
+        )
+
+        assert response.status_code == 422
