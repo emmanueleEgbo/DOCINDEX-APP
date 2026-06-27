@@ -65,3 +65,6 @@ class TestIndexDocumentRoute:
         that immediately returns our fake response. The route handler doesn't know
         it's talking to a mock — it just gets back the IndexingResponse and returns it.
         """
+        with patch("app.services.document_service.index_document", new_callable=AsyncMock) as mock_index:
+            mock_index.return_value = sample_indexing_response
+            response = await client.post("/v1/documents", json=valid_body)
