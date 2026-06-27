@@ -131,3 +131,24 @@ class TestListDocumentsRoute:
 
         assert response.status_code == 200
         assert response.json() == []
+
+
+class TestGetDocumentRoute:
+    async def test_returns_200_when_document_found(self, client, sample_summary):
+        with patch("app.services.document_service.get_document_by_id", new_callable=AsyncMock) as mock_get:
+            mock_get.return_value = sample_summary
+            response = await client.get("/v1/documents/abc-123")
+
+        assert response.status_code == 200
+        assert response.json()["source_document_id"] == "abc-123"
+
+    async def test_returns_404_when_document_not_found(self, client):
+        """
+        The service returns None when no document matches the ID.
+        The route handler checks for None and raises HTTPException(404).
+        """
+        with patch("app.services.document_service.get_document_by_id", new_callable=AsyncMock) as mock_get:
+            mock_get.return_value = None  # document not found
+            response = await client.get("/v1/documents/nonexistent")
+
+        assert response.status_code == 404
