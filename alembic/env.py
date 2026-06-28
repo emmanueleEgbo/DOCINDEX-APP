@@ -11,6 +11,11 @@ import app.models.document    # noqa: F401 — registers Document on Base.metada
 # access to the values within the .ini file in use.
 config = context.config
 
+# our codebase asyncpg (async driver), but Alembic is a sync CLI tool — they don't mix.
+# Swap +asyncpg → +psycopg2 for migrations only. The .env file stays unchanged.
+db_url = settings.sync_database_url
+config.set_main_option("sqlalchemy.url", db_url)
+
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
