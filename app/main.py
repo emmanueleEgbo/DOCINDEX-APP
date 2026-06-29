@@ -17,6 +17,7 @@ from sqlalchemy import text
 from app.core.database import async_engine, Base
 from app.api.document_routes import document_router
 from app.api.query_routes import query_router
+from app.api.health_routes import health_check_router
 from app.models import document  # noqa: F401
 
 logging.basicConfig(
@@ -53,6 +54,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(health_check_router)
 app.include_router(document_router)
 app.include_router(query_router)
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
