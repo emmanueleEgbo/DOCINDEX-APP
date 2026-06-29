@@ -56,11 +56,3 @@ app.add_middleware(
 app.include_router(document_router)
 app.include_router(query_router)
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
-
-@app.get("/", tags=["root"])
-async def root():
-    return {
-        "service": "DocMind API",
-        "version": "1.0.0",
-        "docs": "/docs",
-    }
