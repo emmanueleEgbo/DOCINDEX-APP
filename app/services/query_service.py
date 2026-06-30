@@ -50,7 +50,7 @@ async def query_documents(
         for row in rows
     ]
 
-    # Step 3: call the LLM with the retrieved chunk texts as context
+    # Call the LLM with the retrieved chunk texts as context
     context_texts = [chunk.content for chunk in chunks]
     answer = await generate_answer(request.question, context_texts)
 
