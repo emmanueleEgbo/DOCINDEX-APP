@@ -103,6 +103,15 @@ async def upload_document(
     doc_title = title or file.filename or "Untitled"
     data = DocumentCreate(title=title, content=content, source=source)
 
+    try:
+        return await document_service.index_document(db, data)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc))
+    except RuntimeError as exc:
+        logger.error("Upload indexing failed: %s", exc)
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=str(exc))
+
+
 @document_router.get(
     "",
     response_model=List[DocumentSummary],
