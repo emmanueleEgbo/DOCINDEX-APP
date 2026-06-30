@@ -100,6 +100,8 @@ async def upload_document(
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc))
     
+    doc_title = title or file.filename or "Untitled"
+    data = DocumentCreate(title=title, content=content, source=source)
 
 @document_router.get(
     "",
