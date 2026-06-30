@@ -88,6 +88,12 @@ async def index_document(
     - source (optional) — e.g. 'faq', 'manual', 'hr_policy'
     """,
 )
+async def upload_document(
+    file: UploadFile = File(...),
+    title: Optional[str] = Form(None),
+    source: Optional[str] = Form(None),
+    db: AsyncSession = Depends(get_db),
+) -> IndexingResponse:
     
 
 @document_router.get(
