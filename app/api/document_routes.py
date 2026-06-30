@@ -67,6 +67,19 @@ async def index_document(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail=f"Embedding API error: {exc}",
         )
+
+
+@document_router.post(
+    "/upload",
+    response_model=IndexingResponse,
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        422: {"model": ErrorResponse, "description": "Unsupported file type or empty content"},
+        502: {"model": ErrorResponse, "description": "Embedding API error"},
+    },
+    summary="Upload a file for indexing",
+
+)
     
 
 @document_router.get(
