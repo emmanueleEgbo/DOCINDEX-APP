@@ -22,6 +22,7 @@ from app.schemas.document_schema import (
     ErrorResponse,
 )
 from app.services import document_service
+from app.services.file_extraction_service import extract_text
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +95,10 @@ async def upload_document(
     source: Optional[str] = Form(None),
     db: AsyncSession = Depends(get_db),
 ) -> IndexingResponse:
-    pass
+    try:
+        content = await extract_text(file)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc))
     
 
 @document_router.get(
