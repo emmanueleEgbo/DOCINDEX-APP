@@ -78,7 +78,15 @@ async def index_document(
         502: {"model": ErrorResponse, "description": "Embedding API error"},
     },
     summary="Upload a file for indexing",
+    description="""
+    Upload a .txt, .pdf, or .docx file. The server extracts the text and runs
+    the same indexing pipeline as POST /v1/documents.
 
+    Form fields:
+    - file   (required) — the file to upload
+    - title  (optional) — defaults to the filename if not provided
+    - source (optional) — e.g. 'faq', 'manual', 'hr_policy'
+    """,
 )
     
 
