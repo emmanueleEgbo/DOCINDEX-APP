@@ -9,9 +9,9 @@ Route handlers are intentionally thin:
 All business logic and DB logic lives in services and repositories.
 """
 import logging
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -94,6 +94,7 @@ async def upload_document(
     source: Optional[str] = Form(None),
     db: AsyncSession = Depends(get_db),
 ) -> IndexingResponse:
+    pass
     
 
 @document_router.get(
