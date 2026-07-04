@@ -15,7 +15,7 @@ The 'source_document_id' field groups all chunks that belong to the same
 original document — used for deletion and re-indexing.
 """
 from typing import List
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Integer, String, Text, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
 from pgvector.sqlalchemy import Vector
@@ -87,7 +87,7 @@ class Document(Base):
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow,
+        default=lambda: datetime.now(timezone.utc),
         server_default=func.now(),
         nullable=False
     )
