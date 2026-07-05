@@ -57,4 +57,6 @@ app.add_middleware(
 app.include_router(health_check_router)
 app.include_router(document_router)
 app.include_router(query_router)
+
+# Mounting the frontend html
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
