@@ -58,5 +58,5 @@ app.include_router(health_check_router)
 app.include_router(document_router)
 app.include_router(query_router)
 
-# Mounting the frontend html
+# Mounting the frontend
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
