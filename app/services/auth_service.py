@@ -5,3 +5,6 @@ And another one to authenticate and return a user.
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
+import jwt
+from fastapi import HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
