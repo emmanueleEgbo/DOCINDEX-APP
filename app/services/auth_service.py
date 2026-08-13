@@ -9,4 +9,4 @@ import jwt
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
-from 
+from pwdlib import PasswordHash
