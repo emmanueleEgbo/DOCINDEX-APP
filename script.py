@@ -1,0 +1,1 @@
+"""A script for generating auth secret key"""
