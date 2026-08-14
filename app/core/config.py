@@ -22,6 +22,8 @@ class Settings(BaseSettings):
 
     # Auth secret key
     secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
 
     model_config = SettingsConfigDict(env_file=".env")
 
