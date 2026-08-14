@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     chunk_size: int = 500
     chunk_overlap: int = 50
 
+    # Auth secret key
+    secret_key: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 # Single shared instance — imported everywhere
