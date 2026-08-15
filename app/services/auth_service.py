@@ -33,3 +33,4 @@ password_hash = PasswordHash.recommended()
 
 DUMMY_HASH = password_hash.hash("dummypassword")
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
