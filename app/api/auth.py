@@ -1,1 +1,1 @@
-"""A serv"""
+"""A auth route for ...."""
