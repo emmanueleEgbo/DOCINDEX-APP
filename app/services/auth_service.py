@@ -33,6 +33,8 @@ class UserInDB(User):
 fake_users_db = {
     "johndoe": {
         "username": "johndoe",
+        "full_name": "John Doe",
+
      
     }
 }
