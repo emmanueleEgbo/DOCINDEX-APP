@@ -30,6 +30,14 @@ class UserInDB(User):
     hashed_password: str
 
 
+fake_users_db = {
+    "johndoe": {
+        "username": "johndoe",
+     
+    }
+}
+
+
 password_hash = PasswordHash.recommended()
 
 DUMMY_HASH = password_hash.hash("dummypassword")
