@@ -25,4 +25,10 @@ An example user
 class User(Base):
     __tablename__="users"
 
+    id: Mapped[str] = mapped_column(
+            Integer,
+            primary_key=True,
+            autoincrement=True,
+        )
+ 
     
