@@ -30,5 +30,7 @@ class User(Base):
             primary_key=True,
             autoincrement=True,
         )
+
+    username: Mapped[str] = mapped_column(String, unique=True)
  
     
