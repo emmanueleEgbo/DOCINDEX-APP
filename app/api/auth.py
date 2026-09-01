@@ -1,5 +1,6 @@
 """A auth route for ...."""
 from typing import Annotated
+from app.schemas.user_auth_schema import Token
 
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
