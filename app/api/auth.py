@@ -4,7 +4,7 @@ from typing import Annotated
 from app.schemas.user_auth_schema import Token
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from app.services.auth_service import authenticate_user, fake_users_db
+from app.services.auth_service import authenticate_user, fake_users_db, create_access_token
 
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
