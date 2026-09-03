@@ -1,4 +1,5 @@
 """A auth route for ...."""
+from datetime import timedelta
 from typing import Annotated
 from app.schemas.user_auth_schema import Token
 from fastapi import Depends, HTTPException, status
