@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from app.services.auth_service import get_password_hash
 from app.core.database import get_db
 from app.models.user import User
-from app.schemas.user_auth_schema import CreateUserRequest, UserCreateReturnSchema
+from app.schemas.user_auth_schema import CreateUserRequest
 
 router = APIRouter(prefix="/users", tags=['Users'])
 
@@ -28,3 +28,6 @@ def create_user(user: CreateUserRequest, db: Session = Depends(get_db)):
             status_code=status.HTTP_409_CONFLICT,
             detail=f"User with email '{user.email}' already exists"
         )
+    except Exception as error:
+        print("Failed to create user", error)
+        return error
