@@ -15,7 +15,8 @@ from pwdlib import PasswordHash
 from pydantic import BaseModel
 from app.core.config import settings
 from app.models.user import User
-from app.schemas.user_auth_schema import UserInDB
+from app.schemas.user_auth_schema import UserInDB, TokenData
+from app.core.database import get_db
 
 
 password_hash = PasswordHash.recommended()
@@ -70,35 +71,40 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-        
+
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt    
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Annotated[AsyncSession, Depends(get_db)], ) -> UserInDB:
+        
         credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
         )
+
         try:
-            payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
-            username = payload.get("sub")
-            if username is None:
+            payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm],)
+            email = payload.get("sub")
+            if email is None:
                 raise credentials_exception
-            token_data = TokenData(username=username)
+            
+            token_data = TokenData(email=email)
+
         except InvalidTokenError:
             raise credentials_exception
-        user = get_user(fake_users_db, username=token_data.username)
+        
+        user = await get_user(db, email=token_data.email)
+
         if user is None:
             raise credentials_exception
         return user
 
 
-async def get_current_active_user(
-    current_user: Annotated[User, Depends(get_current_user)],
-):
+async def get_current_active_user(current_user: Annotated[UserInDB, Depends(get_current_user)],) -> UserInDB:
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
+    
     return current_user    
 

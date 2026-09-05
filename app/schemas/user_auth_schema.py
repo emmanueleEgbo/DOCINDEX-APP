@@ -19,6 +19,7 @@ class TokenData(BaseModel):
 class User(BaseModel):
     email: str
     created_at: datetime
+    disabled: bool | None = None
 
     class ConfigDict:
         from_attributes = True
