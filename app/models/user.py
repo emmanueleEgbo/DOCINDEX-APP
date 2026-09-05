@@ -20,7 +20,7 @@ class User(Base):
             autoincrement=True,
         )
 
-    username: Mapped[str] = mapped_column(String, unique=True)
+    email: Mapped[str] = mapped_column(String, unique=True)
     hashed_password: Mapped[str] = mapped_column(String(512), nullable=False) 
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True),

@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class CreateUserRequest(BaseModel):
-    username: str
+    email: str
     password: str
 
 
@@ -13,11 +13,11 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: str | None = None
+    email: str | None = None
 
 
 class User(BaseModel):
-    username: str
+    email: str
     created_at: datetime
 
     class ConfigDict:
