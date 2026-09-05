@@ -2,9 +2,13 @@
 from datetime import timedelta
 from typing import Annotated
 from app.schemas.user_auth_schema import Token
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from app.services.auth_service import authenticate_user, fake_users_db, create_access_token
+from app.core.config import settings
+
+
+router = APIRouter(tags=['Authentication'])
 
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
@@ -16,7 +20,7 @@ async def login_for_access_token(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
     )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
