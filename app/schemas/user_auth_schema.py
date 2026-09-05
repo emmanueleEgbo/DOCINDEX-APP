@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class CreateUserRequest(BaseModel):
@@ -17,7 +18,10 @@ class TokenData(BaseModel):
 
 class User(BaseModel):
     username: str
-    email: str | None = None
+    created_at: datetime
+
+    class ConfigDict:
+        from_attributes = True
 
 
 class UserInDB(User):
