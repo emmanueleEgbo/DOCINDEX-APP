@@ -17,13 +17,14 @@ router = APIRouter(tags=['Authentication'])
 
 @router.post("/login", status_code=status.HTTP_201_CREATED)
 async def create_user(user_credentials: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)) -> Token:
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
-    if not user:
+    # VALIDATE INPUT
+    # user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+    if not user_credentials.username or not user_credentials.password:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
-    )
+        )
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
