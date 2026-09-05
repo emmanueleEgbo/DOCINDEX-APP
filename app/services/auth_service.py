@@ -51,8 +51,10 @@ async def get_user(db: AsyncSession, email: str) -> UserInDB | None:
         created_at=user.created_at,
     )
 
-def authenticate_user(db, username: str, password: str):
-    user = get_user(db, username)
+
+async def authenticate_user(db: AsyncSession, email: str, password: str) -> UserInDB | bool:
+
+    user = await get_user(db, email)
     if not user:
            verify_password(password, DUMMY_HASH)
            return False
@@ -60,13 +62,15 @@ def authenticate_user(db, username: str, password: str):
         return False
     return user
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
+
     to_encode = data.copy()
   
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+        
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt    
