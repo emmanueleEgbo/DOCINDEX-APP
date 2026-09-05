@@ -1,11 +1,14 @@
 """A auth route for ...."""
 from datetime import timedelta
 from typing import Annotated
-from app.schemas.user_auth_schema import Token
 from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
+
+from app.schemas.user_auth_schema import Token
 from app.services.auth_service import authenticate_user, fake_users_db, create_access_token
 from app.core.config import settings
+from app.core.database import get_db
+from app.models.user import User
 
 
 router = APIRouter(tags=['Authentication'])
