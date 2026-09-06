@@ -5,12 +5,12 @@ from sqlalchemy.exc import IntegrityError
 from app.services.auth_service import get_password_hash
 from app.core.database import get_db
 from app.models.user import User
-from app.schemas.user_auth_schema import CreateUserRequest
+from app.schemas.user_auth_schema import CreateUserRequest, UserInDB
 
 router = APIRouter(prefix="/users", tags=['Users'])
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=User)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserInDB)
 def create_user(user: CreateUserRequest, db: Session = Depends(get_db)):
     try: 
         password_hash = get_password_hash(user.password)
@@ -31,3 +31,13 @@ def create_user(user: CreateUserRequest, db: Session = Depends(get_db)):
     except Exception as error:
         print("Failed to create user", error)
         return error
+
+
+
+@router.get("/{id}", response_model=UserInDB)
+def get_user(id: int, db: Session = Depends(get_db)):
+    result = select(User).where(User.id == id)
+    target_user = db.query(result).first()
+    if target_user is None:
+      raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"user with id: {id} was not found")
+    return  target_user
