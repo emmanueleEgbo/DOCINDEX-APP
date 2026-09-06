@@ -11,7 +11,7 @@ router = APIRouter(prefix="/users", tags=['Users'])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserInDB)
-def create_user(user: CreateUserRequest, db: Session = Depends(get_db)):
+def create_user(user: CreateUserRequest, db: Session = Depends(get_db)) -> UserInDB:
     try: 
         password_hash = get_password_hash(user.password)
         new_user = User(
@@ -35,7 +35,7 @@ def create_user(user: CreateUserRequest, db: Session = Depends(get_db)):
 
 
 @router.get("/{id}", response_model=UserInDB)
-def get_user(id: int, db: Session = Depends(get_db)):
+def get_user(id: int, db: Session = Depends(get_db)) -> UserInDB:
     result = select(User).where(User.id == id)
     target_user = db.query(result).first()
     if target_user is None:
