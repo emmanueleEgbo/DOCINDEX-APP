@@ -7,7 +7,7 @@ from app.core.database import get_db
 from app.models.user import User
 from app.schemas.user_auth_schema import CreateUserRequest, UserInDB
 
-router = APIRouter(prefix="/users", tags=['Users'])
+user_router = APIRouter(prefix="/users", tags=['Users'])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserInDB)
