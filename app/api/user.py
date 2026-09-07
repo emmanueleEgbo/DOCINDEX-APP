@@ -10,7 +10,7 @@ from app.schemas.user_auth_schema import CreateUserRequest, UserInDB
 user_router = APIRouter(prefix="/users", tags=['Users'])
 
 
-@user_router.post("/account_creation", status_code=status.HTTP_201_CREATED, response_model=UserInDB)
+@user_router.post("", status_code=status.HTTP_201_CREATED, response_model=UserInDB)
 def create_user(user: CreateUserRequest, db: Session = Depends(get_db)) -> UserInDB:
     try: 
         password_hash = get_password_hash(user.password)
