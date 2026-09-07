@@ -63,6 +63,7 @@ async def authenticate_user(db: AsyncSession, email: str, password: str) -> User
         return False
     return user
 
+
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
 
     to_encode = data.copy()
@@ -86,7 +87,9 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: An
 
         try:
             payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm],)
+
             email = payload.get("sub")
+
             if email is None:
                 raise credentials_exception
             
@@ -99,6 +102,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: An
 
         if user is None:
             raise credentials_exception
+        
         return user
 
 
