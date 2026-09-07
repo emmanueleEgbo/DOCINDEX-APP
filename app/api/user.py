@@ -34,7 +34,7 @@ def create_user(user: CreateUserRequest, db: Session = Depends(get_db)) -> UserI
 
 
 
-@router.get("/{id}", response_model=UserInDB)
+@user_router.get("/{id}", response_model=UserInDB)
 def get_user(id: int, db: Session = Depends(get_db)) -> UserInDB:
     result = select(User).where(User.id == id)
     target_user = db.query(result).first()
