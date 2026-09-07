@@ -12,10 +12,9 @@ from app.core.database import get_db
 from app.models.user import User
 
 
-auth_router = APIRouter(tags=['Authentication'])
+auth_router =  APIRouter(prefix="/login", tags=['Authentication'])
 
-
-auth_router.post("/token", status_code=status.HTTP_201_CREATED)
+@auth_router.post("")
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Annotated[AsyncSession, Depends(get_db)],) -> Token:
     user = await authenticate_user(db, form_data.username, form_data.password)
 
@@ -33,4 +32,3 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
-   

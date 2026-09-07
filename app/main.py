@@ -62,5 +62,6 @@ app.include_router(query_router)
 app.include_router(user_router)
 app.include_router(auth_router)
 
+
 # Mounting the frontend
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
