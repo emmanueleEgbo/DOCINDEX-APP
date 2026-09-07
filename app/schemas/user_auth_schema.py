@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 
@@ -17,12 +17,12 @@ class TokenData(BaseModel):
 
 
 class User(BaseModel):
+    # Make Pydantic create the model from an ORM/database object rather than only from a dictionary.
+    model_config = ConfigDict(from_attributes=True) 
+
     email: str
     created_at: datetime
     disabled: bool | None = None
-
-    class ConfigDict:
-        from_attributes = True
 
 
 class UserInDB(User):
