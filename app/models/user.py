@@ -4,7 +4,7 @@ USER ORM model.
 Each row in the 'users' table represents a user in our DOCIND system.
 """
 from typing import List
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Integer, String, Boolean, DateTime, func, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column
 from pgvector.sqlalchemy import Vector
@@ -24,7 +24,7 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String(512), nullable=False) 
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True),
-        default=lambda: datetime.now(timezone.utc)
+        default=lambda: datetime.now(timezone.utc),
         nullable=False
     )
     disabled: Mapped[bool] = mapped_column(Boolean, default=False)
