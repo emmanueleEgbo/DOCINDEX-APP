@@ -12,10 +12,10 @@ from app.core.database import get_db
 from app.models.user import User
 
 
-router = APIRouter(tags=['Authentication'])
+auth_router = APIRouter(tags=['Authentication'])
 
 
-@router.post("/token", status_code=status.HTTP_201_CREATED)
+auth_router.post("/token", status_code=status.HTTP_201_CREATED)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Annotated[AsyncSession, Depends(get_db)],) -> Token:
     user = await authenticate_user(db, form_data.username, form_data.password)
 
