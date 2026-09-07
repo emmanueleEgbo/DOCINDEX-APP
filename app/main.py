@@ -18,6 +18,8 @@ from app.core.database import async_engine, Base
 from app.api.document_routes import document_router
 from app.api.query_routes import query_router
 from app.api.health_routes import health_check_router
+from app.api.user import user_router
+from app.api.auth import auth_router
 from app.models import document  # noqa: F401
 
 logging.basicConfig(
