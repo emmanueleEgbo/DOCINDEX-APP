@@ -2,8 +2,8 @@
 USER ORM model.
 
 Each row in the 'users' table represents a user in our DOCIND system.
+A user can either a normal user or admin
 """
-from typing import List
 from datetime import datetime, timezone
 from sqlalchemy import Integer, String, Boolean, DateTime, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column
