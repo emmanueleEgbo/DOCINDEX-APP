@@ -5,7 +5,7 @@ Each row in the 'users' table represents a user in our DOCIND system.
 """
 from typing import List
 from datetime import datetime, timezone
-from sqlalchemy import Integer, String, Boolean, DateTime, func, TIMESTAMP
+from sqlalchemy import Integer, String, Boolean, DateTime, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column
 from pgvector.sqlalchemy import Vector
 from app.core.database import Base
