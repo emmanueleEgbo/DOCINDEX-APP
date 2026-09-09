@@ -27,4 +27,5 @@ class User(Base):
         default=lambda: datetime.now(timezone.utc),
         nullable=False
     )
-    disabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    disabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
