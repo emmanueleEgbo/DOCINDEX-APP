@@ -6,6 +6,7 @@ from app.core.database import get_db
 from app.schemas.query_schema import QueryRequest, QueryResponse
 from app.schemas.document_schema import ErrorResponse
 from app.services import query_service
+from app.services.auth_service import get_current_active_user
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +15,7 @@ query_router = APIRouter(prefix="/v1/query", tags=["query"])
 
 @query_router.post(
     "",
+    dependencies=[Depends(get_current_active_user)],
     response_model=QueryResponse,
     responses={
         422: {"model": ErrorResponse, "description": "Validation error"},
