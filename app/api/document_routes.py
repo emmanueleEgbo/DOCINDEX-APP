@@ -117,6 +117,7 @@ async def upload_document(
 
 @document_router.get(
     "",
+    dependencies=[Depends(get_current_active_user)],
     response_model=List[DocumentSummary],
     summary="List all indexed documents",
     description="""
