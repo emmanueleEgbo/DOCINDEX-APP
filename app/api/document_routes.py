@@ -74,6 +74,7 @@ async def index_document(
 
 @document_router.post(
     "/upload",
+    dependencies=[Depends(get_current_active_user)],
     response_model=IndexingResponse,
     status_code=status.HTTP_201_CREATED,
     responses={
