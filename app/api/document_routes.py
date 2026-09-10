@@ -24,7 +24,7 @@ from app.schemas.document_schema import (
 from app.services import document_service
 from app.services.file_extraction_service import extract_text
 from app.services.auth_service import get_current_active_user
-from app.models.user import User
+
 
 logger = logging.getLogger(__name__)
 
