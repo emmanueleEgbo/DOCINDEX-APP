@@ -9,7 +9,7 @@ Route handlers are intentionally thin:
 All business logic and DB logic lives in services and repositories.
 """
 import logging
-from typing import List, Optional
+from typing import List, Optional, Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,6 +23,8 @@ from app.schemas.document_schema import (
 )
 from app.services import document_service
 from app.services.file_extraction_service import extract_text
+from app.services.auth_service import get_current_active_user
+from app.models.user import User
 
 logger = logging.getLogger(__name__)
 
