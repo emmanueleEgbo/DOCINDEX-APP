@@ -33,6 +33,7 @@ document_router = APIRouter(prefix="/v1/documents", tags=["documents"])
 
 @document_router.post(
     "",
+    dependencies=[Depends(get_current_active_user)],
     response_model=IndexingResponse,
     status_code=status.HTTP_201_CREATED,
     responses={
@@ -134,6 +135,7 @@ async def list_documents(
 
 @document_router.get(
     "/{source_document_id}",
+    dependencies=[Depends(get_current_active_user)],
     response_model=DocumentSummary,
     responses={404: {"model": ErrorResponse}},
     summary="Get one document's metadata",
@@ -153,6 +155,7 @@ async def get_document(
 
 @document_router.delete(
     "/{source_document_id}",
+    dependencies=[Depends(get_current_active_user)],
     status_code=status.HTTP_204_NO_CONTENT,
     responses={404: {"model": ErrorResponse}},
     summary="Delete a document and all its chunks",
