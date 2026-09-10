@@ -59,8 +59,13 @@ async def authenticate_user(db: AsyncSession, email: str, password: str) -> User
     if not user:
            verify_password(password, DUMMY_HASH)
            return False
+    
     if not verify_password(password, user.hashed_password):
         return False
+    
+    if user.disabled:
+        return False
+    
     return user
 
 
